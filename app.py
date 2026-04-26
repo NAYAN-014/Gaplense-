@@ -25,6 +25,37 @@ results_col   = db['test_results']
 questions_col = db['questions']
 fs = gridfs.GridFS(db)  # GridFS for resume file storage
 
+# ── DEFAULT ADMIN SEED ────────────────────────────────────────────────────────
+DEFAULT_ADMIN_EMAIL = 'gaplensvip@gmail.com'
+DEFAULT_ADMIN_PASSWORD = 'vip@123'
+
+
+def seed_default_admin():
+    """Ensure the default admin account exists in the database."""
+    if not users_col.find_one({'email': DEFAULT_ADMIN_EMAIL}):
+        users_col.insert_one({
+            'name': 'GapLens Admin',
+            'email': DEFAULT_ADMIN_EMAIL,
+            'password': DEFAULT_ADMIN_PASSWORD,
+            'role': 'admin',
+            'college': '',
+            'skills': [],
+            'bio': 'Platform Administrator',
+            'linkedin': '',
+            'google_drive_resume_link': '',
+        })
+        print(f"[SEED] Default admin created: {DEFAULT_ADMIN_EMAIL}")
+    else:
+        # Ensure password is always synced to default (for recovery)
+        users_col.update_one(
+            {'email': DEFAULT_ADMIN_EMAIL},
+            {'$set': {'password': DEFAULT_ADMIN_PASSWORD, 'role': 'admin'}}
+        )
+
+
+# Run seed on module load
+seed_default_admin()
+
 # ── Google OAuth (Authlib) ────────────────────────────────────────────────────
 oauth = OAuth(app)
 google = oauth.register(
