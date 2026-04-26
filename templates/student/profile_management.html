@@ -13,6 +13,26 @@
       </button>
     </form>
   </div>
+
+  <!-- Uploaded Resume Banner -->
+  {% if user and user.get('uploaded_resume_id') %}
+  <div class="glass-card rounded-2xl p-5 mb-6 flex flex-col md:flex-row items-center justify-between gap-4 border-l-4 border-l-cyan-400">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-cyan-400 text-2xl">description</span>
+      <div>
+        <p class="text-white text-sm font-bold font-['Space_Grotesk']">{{ user.uploaded_resume_filename or 'Uploaded Resume' }}</p>
+        <p class="text-slate-500 text-xs">Recruiters can download your resume</p>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <a href="{{ url_for('download_resume') }}" class="px-5 py-2 bg-primary-container text-on-primary font-['Space_Grotesk'] font-bold rounded-lg text-xs flex items-center gap-1.5 hover:brightness-110 transition-all"><span class="material-symbols-outlined text-sm">download</span>Download</a>
+      <form method="POST" action="{{ url_for('delete_resume') }}">
+        <button type="submit" class="px-5 py-2 border border-red-500/30 text-red-400 font-['Space_Grotesk'] font-bold rounded-lg text-xs flex items-center gap-1.5 hover:bg-red-500/10 transition-all"><span class="material-symbols-outlined text-sm">delete</span>Remove</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+
   <!-- Resume Preview -->
   <div class="glass-card rounded-2xl p-8">
     <div class="border-b border-white/10 pb-6 mb-6">

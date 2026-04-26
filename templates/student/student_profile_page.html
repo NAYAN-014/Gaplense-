@@ -17,12 +17,53 @@
   </div>
 </section>
 
-<section class="md:col-span-4 glass-card rounded-xl p-8 flex flex-col justify-between border-b-4 border-b-secondary-container">
-  <div><h3 class="font-['Space_Grotesk'] text-secondary text-lg mb-2 flex items-center gap-2"><span class="material-symbols-outlined">auto_awesome</span>Smart Resume</h3>
-  <p class="text-on-surface-variant text-sm mb-4">Auto-generated PDF from your verified diagnostic scores.</p></div>
-  <form method="POST" action="{{ url_for('generate_resume') }}">
-    <button type="submit" class="w-full bg-gradient-to-r from-cyan-400 to-blue-500 hover:brightness-110 text-on-primary font-['Space_Grotesk'] font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all glow-cyan"><span class="material-symbols-outlined">download</span>Generate & Email PDF</button>
-  </form>
+<section class="md:col-span-4 space-y-6">
+  <!-- AI Resume -->
+  <div class="glass-card rounded-xl p-8 flex flex-col justify-between border-b-4 border-b-secondary-container">
+    <div><h3 class="font-['Space_Grotesk'] text-secondary text-lg mb-2 flex items-center gap-2"><span class="material-symbols-outlined">auto_awesome</span>Smart Resume</h3>
+    <p class="text-on-surface-variant text-sm mb-4">Auto-generated PDF from your verified diagnostic scores.</p></div>
+    <form method="POST" action="{{ url_for('generate_resume') }}">
+      <button type="submit" class="w-full bg-gradient-to-r from-cyan-400 to-blue-500 hover:brightness-110 text-on-primary font-['Space_Grotesk'] font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all glow-cyan"><span class="material-symbols-outlined">download</span>Generate & Email PDF</button>
+    </form>
+  </div>
+
+  <!-- Uploaded Resume Card -->
+  <div class="glass-card rounded-xl p-6 border-l-4 border-l-cyan-400">
+    <h3 class="font-['Space_Grotesk'] text-white text-lg mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-400">upload_file</span>Your Resume</h3>
+    <p class="text-slate-400 text-xs mb-4">Upload PDF, DOC, or DOCX (max 5 MB). Recruiters can view your profile.</p>
+
+    {% if user and user.get('uploaded_resume_id') %}
+      <div class="mb-4 p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-cyan-400">description</span>
+            <span class="text-white text-sm truncate">{{ user.uploaded_resume_filename or 'Resume' }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <a href="{{ url_for('download_resume') }}" class="flex-1 py-2.5 bg-primary-container text-on-primary font-['Space_Grotesk'] font-bold rounded-lg text-center text-xs flex items-center justify-center gap-1.5 hover:brightness-110 transition-all"><span class="material-symbols-outlined text-sm">download</span>Download</a>
+        <form method="POST" action="{{ url_for('delete_resume') }}" class="flex-1">
+          <button type="submit" class="w-full py-2.5 border border-red-500/30 text-red-400 font-['Space_Grotesk'] font-bold rounded-lg text-center text-xs flex items-center justify-center gap-1.5 hover:bg-red-500/10 transition-all"><span class="material-symbols-outlined text-sm">delete</span>Remove</button>
+        </form>
+      </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('upload_resume') }}" enctype="multipart/form-data" class="mt-3">
+      <label class="block w-full cursor-pointer">
+        <input type="file" name="resume_file" accept=".pdf,.doc,.docx" class="hidden" onchange="this.form.submit()"/>
+        <div class="w-full py-3 border border-dashed border-white/20 rounded-lg text-slate-400 text-xs font-['Space_Grotesk'] font-bold flex items-center justify-center gap-2 hover:border-cyan-500/50 hover:text-cyan-400 transition-all">
+          <span class="material-symbols-outlined text-sm">cloud_upload</span>Upload Resume File
+        </div>
+      </label>
+    </form>
+
+    {% if user and user.get('google_drive_resume_link') %}
+      <a href="{{ user.google_drive_resume_link }}" target="_blank" class="mt-3 w-full py-2.5 border border-blue-500/30 text-blue-400 font-['Space_Grotesk'] font-bold rounded-lg text-center text-xs flex items-center justify-center gap-1.5 hover:bg-blue-500/10 transition-all">
+        <span class="material-symbols-outlined text-sm">link</span>Google Drive Resume
+      </a>
+    {% endif %}
+  </div>
 </section>
 
 <section class="md:col-span-5 glass-card rounded-xl p-8">

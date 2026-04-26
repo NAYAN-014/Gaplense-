@@ -3,27 +3,35 @@
 {% block content %}
 <div class="max-w-6xl mx-auto pb-20">
   <div class="mb-6">
-    <h1 class="text-2xl font-bold text-white font-['Space_Grotesk']">Job Matches</h1>
-    <p class="text-slate-400 text-sm mt-1">Opportunities matching your verified skills</p>
+    <h1 class="text-2xl font-bold text-white font-['Space_Grotesk']">Job Opportunities</h1>
+    <p class="text-slate-400 text-sm mt-1">All recruiter postings — best matches shown first</p>
   </div>
   {% if skills %}
   <div class="flex flex-wrap gap-2 mb-6">
+    <span class="text-xs text-slate-500 font-['Space_Grotesk'] mr-2">Your verified skills:</span>
     {% for s in skills %}<span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-full text-xs font-['Space_Grotesk'] font-bold">{{ s }}</span>{% endfor %}
   </div>
   {% endif %}
   {% if jobs %}
   <div class="space-y-4">
     {% for job in jobs %}
-    <div class="glass-card rounded-2xl p-6 hover:border-cyan-500/30 transition-all">
+    <div class="glass-card rounded-2xl p-6 hover:border-cyan-500/30 transition-all {% if job.is_match %}border-l-4 border-l-green-500{% else %}border-l-4 border-l-transparent{% endif %}">
       <div class="flex items-start justify-between mb-3">
-        <div>
-          <h3 class="font-['Space_Grotesk'] font-bold text-white text-lg">{{ job.title }}</h3>
-          <p class="text-slate-400 text-sm">{{ job.company }} · {{ job.location }}</p>
+        <div class="flex items-start gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-['Space_Grotesk'] font-bold text-white text-lg">{{ job.title }}</h3>
+              {% if job.is_match %}<span class="px-2 py-0.5 bg-green-500/15 border border-green-500/30 text-green-400 text-[10px] font-bold rounded-full uppercase">Best Match</span>{% endif %}
+            </div>
+            <p class="text-slate-400 text-sm">{{ job.company }} · {{ job.location }}</p>
+          </div>
         </div>
         <span class="px-3 py-1 bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-bold rounded-full">{{ job.type if job.type else 'Full-time' }}</span>
       </div>
       <div class="flex flex-wrap gap-2 mb-4">
-        {% for skill in job.get('required_skills',[]) %}<span class="px-2 py-0.5 bg-surface-container text-slate-300 rounded text-xs">{{ skill }}</span>{% endfor %}
+        {% for skill in job.get('required_skills',[]) %}
+          <span class="px-2 py-0.5 {% if skill in skills %}bg-cyan-500/15 text-cyan-300 border border-cyan-500/20{% else %}bg-surface-container text-slate-300{% endif %} rounded text-xs">{{ skill }}</span>
+        {% endfor %}
       </div>
       <a href="{{ job.link if job.link else '#' }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-primary-container text-on-primary text-xs font-['Space_Grotesk'] font-bold rounded-lg hover:brightness-110 transition-all">Apply Now <span class="material-symbols-outlined text-sm">open_in_new</span></a>
     </div>
@@ -32,8 +40,8 @@
   {% else %}
   <div class="glass-card rounded-2xl p-16 text-center">
     <span class="material-symbols-outlined text-6xl text-slate-600 mb-4 block">work</span>
-    <h2 class="font-['Space_Grotesk'] text-xl text-white mb-2">No Job Matches Yet</h2>
-    <p class="text-slate-400 mb-6">Verify your skills through assessments to unlock matched job listings.</p>
+    <h2 class="font-['Space_Grotesk'] text-xl text-white mb-2">No Jobs Posted Yet</h2>
+    <p class="text-slate-400 mb-6">Recruiters haven't posted any jobs yet. Check back later or verify your skills through assessments.</p>
     <a href="{{ url_for('test_selection') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-container text-on-primary font-['Space_Grotesk'] font-bold rounded-xl hover:brightness-110 transition-all glow-cyan">
       <span class="material-symbols-outlined">quiz</span>Start Assessment
     </a>
