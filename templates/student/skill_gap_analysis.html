@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Skill Gap Analysis{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto pb-20">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-white font-['Space_Grotesk']">Skill Gap Analysis</h1>
+    <p class="text-slate-400 text-sm mt-1">Your identified gaps vs mastered skills</p>
+  </div>
+  <div class="grid md:grid-cols-2 gap-6 mb-6">
+    <div class="glass-card rounded-2xl p-6 border border-red-500/20">
+      <h2 class="font-['Space_Grotesk'] font-bold text-red-400 mb-4 flex items-center gap-2"><span class="material-symbols-outlined">warning</span>Gaps to Fix ({{ gaps|length }})</h2>
+      {% if gaps %}{% for r in gaps %}
+      <div class="flex items-center justify-between py-3 border-b border-white/5">
+        <span class="text-white font-medium">{{ r.skill }}</span>
+        <div class="flex items-center gap-3">
+          <div class="w-24 h-2 bg-surface-container rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width:{{ r.score|round|int }}%"></div></div>
+          <span class="text-red-400 font-bold text-sm w-10 text-right">{{ r.score|round|int }}%</span>
+        </div>
+      </div>
+      {% endfor %}{% else %}
+      <p class="text-slate-400 text-sm">No gaps found yet! Take assessments to identify areas for improvement.</p>
+      {% endif %}
+    </div>
+    <div class="glass-card rounded-2xl p-6 border border-green-500/20">
+      <h2 class="font-['Space_Grotesk'] font-bold text-green-400 mb-4 flex items-center gap-2"><span class="material-symbols-outlined">verified</span>Mastered Skills ({{ mastered|length }})</h2>
+      {% if mastered %}{% for r in mastered %}
+      <div class="flex items-center justify-between py-3 border-b border-white/5">
+        <span class="text-white font-medium">{{ r.skill }}</span>
+        <div class="flex items-center gap-3">
+          <div class="w-24 h-2 bg-surface-container rounded-full overflow-hidden"><div class="h-full bg-green-500 rounded-full" style="width:{{ r.score|round|int }}%"></div></div>
+          <span class="text-green-400 font-bold text-sm w-10 text-right">{{ r.score|round|int }}%</span>
+        </div>
+      </div>
+      {% endfor %}{% else %}
+      <p class="text-slate-400 text-sm">No mastered skills yet. Keep taking tests!</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="text-center">
+    <a href="{{ url_for('test_selection') }}" class="inline-flex items-center gap-2 px-8 py-3 bg-primary-container text-on-primary font-['Space_Grotesk'] font-bold rounded-xl hover:brightness-110 transition-all glow-cyan">
+      <span class="material-symbols-outlined">quiz</span>Take More Assessments
+    </a>
+  </div>
+</div>
+{% endblock %}

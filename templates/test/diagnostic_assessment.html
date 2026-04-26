@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block title %}{{ skill }} Assessment{% endblock %}
+{% block extra_styles %}
+.option-label{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;border-radius:0.875rem;border:1px solid rgba(255,255,255,0.08);cursor:pointer;transition:all 0.2s ease;background:rgba(255,255,255,0.02)}
+.option-label:hover{border-color:rgba(0,240,255,0.4);background:rgba(0,240,255,0.05)}
+.option-label input[type=radio]:checked ~ .opt-circle{border-color:#00f0ff;background:#00f0ff}
+.option-label input[type=radio]:checked ~ .opt-circle::after{content:'';display:block;width:8px;height:8px;border-radius:50%;background:#00363a;margin:auto}
+.option-label:has(input:checked){border-color:rgba(0,240,255,0.5);background:rgba(0,240,255,0.08)}
+.opt-circle{width:20px;height:20px;border-radius:50%;border:2px solid #475569;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.q-slide{display:none}.q-slide.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.q-slide.active{animation:fadeIn 0.3s ease}
+{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto pb-20">
+  {% if questions %}
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <span class="text-[10px] font-['Space_Grotesk'] font-bold tracking-[0.2em] text-cyan-400 uppercase block mb-1">Diagnostic Assessment</span>
+      <h1 class="text-2xl font-bold text-white font-['Space_Grotesk']">{{ skill }}</h1>
+    </div>
+    <div class="glass-card px-5 py-3 rounded-xl flex items-center gap-2">
+      <span class="material-symbols-outlined text-cyan-400">timer</span>
+      <span id="timer-display" class="font-['Space_Grotesk'] font-bold text-cyan-400 text-lg tabular-nums">10:00</span>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="mb-6">
+    <div class="flex justify-between text-xs text-slate-500 font-['Space_Grotesk'] mb-2">
+      <span>Question <span id="q-current">1</span> of {{ questions|length }}</span>
+      <span id="q-pct">0% complete</span>
+    </div>
+    <div class="h-2 bg-surface-container rounded-full overflow-hidden">
+      <div id="progress-bar" class="h-full bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full transition-all duration-500" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Questions -->
+  <div id="question-container">
+    {% for q in questions %}
+    {% set i = loop.index0 %}
+    <div class="q-slide {% if loop.first %}active{% endif %}" data-index="{{ i }}">
+      <div class="glass-card rounded-2xl p-8 mb-6">
+        <div class="flex items-start gap-4 mb-6">
+          <span class="text-3xl font-bold text-cyan-400/40 font-['Space_Grotesk'] flex-shrink-0 leading-none">{{ '%02d'|format(loop.index) }}</span>
+          <p class="text-white text-lg font-['Space_Grotesk'] font-medium leading-relaxed">{{ q.question }}</p>
+        </div>
+        <div class="space-y-3">
+          {% for opt in q.options %}
+          <label class="option-label">
+            <input type="radio" name="q{{ i }}" value="{{ opt }}" data-correct="{{ q.answer }}" class="sr-only answer-radio"/>
+            <div class="opt-circle"></div>
+            <span class="text-on-surface-variant text-sm font-['Inter']">{{ opt }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+
+  <!-- Navigation -->
+  <div class="flex items-center justify-between">
+    <button id="btn-prev" onclick="navigate(-1)" class="flex items-center gap-2 px-5 py-3 border border-white/10 text-slate-400 hover:text-white hover:border-white/20 rounded-xl font-['Space_Grotesk'] font-bold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed" disabled>
+      <span class="material-symbols-outlined text-base">arrow_back</span>Previous
+    </button>
+    <button id="btn-next" onclick="navigate(1)" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-['Space_Grotesk'] font-bold text-sm hover:brightness-110 transition-all glow-cyan">
+      Next<span class="material-symbols-outlined text-base">arrow_forward</span>
+    </button>
+    <button id="btn-submit" onclick="submitTest()" class="hidden flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-green-500 to-cyan-500 text-white rounded-xl font-['Space_Grotesk'] font-bold text-sm hover:brightness-110 transition-all glow-cyan">
+      <span class="material-symbols-outlined text-base">check_circle</span>Submit Test
+    </button>
+  </div>
+
+  <!-- Hidden data -->
+  <div id="test-meta"
+    data-skill="{{ skill }}"
+    data-total="{{ questions|length }}"
+    data-redirect="{{ url_for('results_recommendations', skill=skill) }}"
+    data-submit-url="{{ url_for('submit_diagnostic') }}">
+  </div>
+
+  {% else %}
+  <!-- No questions available -->
+  <div class="glass-card rounded-2xl p-16 text-center">
+    <span class="material-symbols-outlined text-6xl text-slate-600 mb-4 block">quiz</span>
+    <h2 class="font-['Space_Grotesk'] text-xl text-white mb-2">No Questions Available</h2>
+    <p class="text-slate-400 mb-6">Questions for <strong class="text-white">{{ skill }}</strong> haven't been added yet.</p>
+    <a href="{{ url_for('test_selection') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-container text-on-primary font-['Space_Grotesk'] font-bold rounded-xl hover:brightness-110 transition-all">
+      <span class="material-symbols-outlined">arrow_back</span>Back to Assessments
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+const meta = document.getElementById('test-meta');
+const TOTAL = parseInt(meta.dataset.total);
+const SKILL = meta.dataset.skill;
+const REDIRECT = meta.dataset.redirect;
+const SUBMIT_URL = meta.dataset.submitUrl;
+let current = 0;
+const slides = document.querySelectorAll('.q-slide');
+const answers = {};
+
+function navigate(dir) {
+  slides[current].classList.remove('active');
+  current = Math.max(0, Math.min(TOTAL - 1, current + dir));
+  slides[current].classList.add('active');
+  updateUI();
+}
+
+function updateUI() {
+  document.getElementById('q-current').textContent = current + 1;
+  const pct = Math.round((current / TOTAL) * 100);
+  document.getElementById('q-pct').textContent = pct + '% complete';
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('btn-prev').disabled = current === 0;
+  const isLast = current === TOTAL - 1;
+  document.getElementById('btn-next').classList.toggle('hidden', isLast);
+  document.getElementById('btn-submit').classList.toggle('hidden', !isLast);
+}
+
+// Save answer on change
+document.querySelectorAll('.answer-radio').forEach(r => {
+  r.addEventListener('change', function() {
+    const qIdx = this.name.replace('q', '');
+    answers[qIdx] = { selected: this.value, correct: this.dataset.correct };
+  });
+});
+
+// Timer
+let seconds = 600;
+const timerEl = document.getElementById('timer-display');
+const timerInterval = setInterval(() => {
+  seconds--;
+  if (seconds <= 0) { clearInterval(timerInterval); submitTest(); return; }
+  const m = Math.floor(seconds / 60).toString().padStart(2,'0');
+  const s = (seconds % 60).toString().padStart(2,'0');
+  timerEl.textContent = m + ':' + s;
+  if (seconds <= 60) timerEl.style.color = '#f87171';
+}, 1000);
+
+function submitTest() {
+  clearInterval(timerInterval);
+  const selected = [], correct = [];
+  for (let i = 0; i < TOTAL; i++) {
+    selected.push(answers[i] ? answers[i].selected : '');
+    correct.push(answers[i] ? answers[i].correct : '');
+  }
+  const btn = document.getElementById('btn-submit');
+  btn.textContent = 'Submitting…';
+  btn.disabled = true;
+  fetch(SUBMIT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ skill: SKILL, answers: selected, correct_answers: correct })
+  })
+  .then(r => r.json())
+  .then(data => {
+    window.location.href = data.redirect || REDIRECT;
+  })
+  .catch(() => { window.location.href = REDIRECT; });
+}
+
+// Override Jinja enumerate filter if missing
+updateUI();
+</script>
+{% endblock %}

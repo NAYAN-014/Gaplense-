@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .glass-stroke {
+            border: 1px solid;
+            border-image-source: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+        }
+        .progress-liquid {
+            background: linear-gradient(180deg, #00dbe9 0%, #006970 100%);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 219, 233, 0.2);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#101415",
+                        "surface-container-high": "#272a2c",
+                        "on-surface-variant": "#b9cacb",
+                        "on-secondary": "#520072",
+                        "on-primary-container": "#006970",
+                        "inverse-on-surface": "#2d3133",
+                        "primary": "#dbfcff",
+                        "on-tertiary-container": "#5e5e69",
+                        "surface-container-highest": "#323537",
+                        "on-tertiary-fixed": "#1a1b24",
+                        "inverse-surface": "#e0e3e5",
+                        "on-error": "#690005",
+                        "secondary-fixed-dim": "#ebb2ff",
+                        "secondary": "#ebb2ff",
+                        "surface-tint": "#00dbe9",
+                        "surface-container": "#1d2022",
+                        "primary-container": "#00f0ff",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#323537",
+                        "on-primary": "#00363a",
+                        "on-tertiary": "#2f303a",
+                        "surface-dim": "#101415",
+                        "inverse-primary": "#006970",
+                        "outline-variant": "#3b494b",
+                        "on-background": "#e0e3e5",
+                        "primary-fixed": "#7df4ff",
+                        "on-primary-fixed": "#002022",
+                        "on-secondary-container": "#fff6fc",
+                        "outline": "#849495",
+                        "on-secondary-fixed": "#320047",
+                        "on-tertiary-fixed-variant": "#454651",
+                        "secondary-container": "#b600f8",
+                        "surface-container-lowest": "#0b0f10",
+                        "on-surface": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#74009f",
+                        "primary-fixed-dim": "#00dbe9",
+                        "tertiary-fixed-dim": "#c6c5d2",
+                        "background": "#101415",
+                        "surface-bright": "#363a3b",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#e3e1ef",
+                        "tertiary": "#f7f4ff",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#004f54",
+                        "secondary-fixed": "#f8d8ff",
+                        "surface-container-low": "#191c1e",
+                        "tertiary-container": "#d9d8e6"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Space Grotesk"],
+                        "headline-sm": ["Space Grotesk"],
+                        "label-caps": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                        "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "headline-md": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden selection:bg-primary-container/30">
+<!-- Sidebar Navigation -->
+<nav class="fixed left-0 top-0 h-full flex flex-col p-6 bg-slate-950/40 backdrop-blur-xl border-r border-white/10 w-64 z-50 transition-all duration-300 ease-in-out hidden md:flex">
+<div class="mb-10">
+<span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500 font-['Space_Grotesk']">GapLens</span>
+<p class="text-slate-400 text-xs mt-1 font-['Space_Grotesk'] tracking-wide">Mastery Level: 85%</p>
+</div>
+<div class="flex flex-col space-y-2 flex-grow">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-3 p-3 rounded-lg bg-cyan-500/10 text-cyan-400 border-r-2 border-cyan-400 shadow-[inset_-10px_0_20px_-10px_rgba(0,240,255,0.3)] transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Space_Grotesk'] text-sm tracking-wide">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-['Space_Grotesk'] text-sm tracking-wide">Skill Map</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-['Space_Grotesk'] text-sm tracking-wide">Insights</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span class="font-['Space_Grotesk'] text-sm tracking-wide">Assessments</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 hover:backdrop-blur-lg transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-['Space_Grotesk'] text-sm tracking-wide">Resources</span>
+</a>
+</div>
+<div class="mt-auto pt-6 border-t border-white/10">
+<button class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-400 to-purple-500 text-slate-950 font-bold font-['Space_Grotesk'] text-sm uppercase tracking-wider hover:opacity-90 transition-opacity">
+                Upgrade Pro
+            </button>
+<a class="flex items-center gap-3 p-3 mt-4 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Space_Grotesk'] text-sm tracking-wide">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] h-16 bg-slate-950/20 backdrop-blur-md border-b border-white/10 flex justify-between items-center px-8 z-40">
+<div class="flex items-center gap-4">
+<span class="text-xl font-black text-cyan-400 tracking-tighter md:hidden">GapLens</span>
+<div class="hidden md:flex items-center bg-white/5 border border-white/10 rounded-full px-4 py-1.5 focus-within:ring-1 focus-within:ring-cyan-500/50 transition-all">
+<span class="material-symbols-outlined text-slate-400 text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs text-white placeholder:text-slate-500 w-64" placeholder="Search skills, courses..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-slate-300 hover:text-cyan-300 cursor-pointer" data-icon="notifications">notifications</span>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold text-white">Alex Rivera</p>
+<p class="text-[10px] text-slate-400">Senior Undergrad</p>
+</div>
+<img alt="Alex Rivera" class="w-10 h-10 rounded-full border border-cyan-400/30" data-alt="Close-up professional portrait of a young man with a friendly expression in a modern high-tech office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR_qj80zcegcBXoZ2kkQosEuvOe0AwmBMn514FjJG1jnCLIWruvi2wV6Vl8IpIKcjobinevoAszvRF36xoNbJSxbm1IMSAtIBgvFM4gwUrlI8wB9zbKSp9y68opJJYIXZt0LN0EM_yHIf2E4ru1jJsyVG3Casew_IZHYVMAIwfecYOO_9jE0UPye1Qd_0sQesY5kKGpVHWYJXDXfyH5ckbSbx1rQo-vAIvx5CTZdeAPvuiYpWfpfsRqeeG0gJMRgjxCiUtjvrt6nGm"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-12 px-6 md:ml-64 min-h-screen bg-surface">
+<div class="max-w-7xl mx-auto">
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6">
+<!-- 1. Profile Overview (2x2) -->
+<div class="md:col-span-2 lg:col-span-2 glass-card rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 p-6 opacity-10">
+<span class="material-symbols-outlined text-8xl" data-icon="school">school</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-on-surface mb-1">Academic Profile</h2>
+<p class="text-on-surface-variant font-body-md">Stanford University</p>
+<div class="mt-8">
+<div class="relative w-32 h-32 mx-auto">
+<svg class="w-full h-full transform -rotate-90">
+<circle cx="64" cy="64" fill="transparent" r="58" stroke="rgba(255,255,255,0.05)" stroke-width="8"></circle>
+<circle cx="64" cy="64" fill="transparent" r="58" stroke="url(#cyan-gradient)" stroke-dasharray="364.4" stroke-dashoffset="54.6" stroke-linecap="round" stroke-width="10"></circle>
+<defs>
+<lineargradient id="cyan-gradient" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#00f0ff;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#b600f8;stop-opacity:1"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline-md text-on-surface">85</span>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest">Mastery</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between mt-8 pt-6 border-t border-white/5">
+<div class="text-center">
+<p class="text-xl font-bold text-white">12</p>
+<p class="text-[10px] text-slate-500 uppercase">Courses</p>
+</div>
+<div class="text-center">
+<p class="text-xl font-bold text-white">4.0</p>
+<p class="text-[10px] text-slate-500 uppercase">GPA</p>
+</div>
+<div class="text-center">
+<p class="text-xl font-bold text-white">92%</p>
+<p class="text-[10px] text-slate-500 uppercase">Percentile</p>
+</div>
+</div>
+</div>
+<!-- 2. Recent Assessment Results (2x2) -->
+<div class="md:col-span-2 lg:col-span-2 glass-card rounded-3xl p-8 flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline-sm text-on-surface">Recent Metrics</h2>
+<span class="material-symbols-outlined text-cyan-400" data-icon="history">history</span>
+</div>
+<div class="space-y-6 flex-grow">
+<div class="group">
+<div class="flex justify-between mb-2">
+<span class="text-sm font-medium">Quantum Computing</span>
+<span class="text-sm text-cyan-400">92/100</span>
+</div>
+<div class="h-1.5 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-cyan-400 group-hover:bg-cyan-300 transition-all" style="width: 92%"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between mb-2">
+<span class="text-sm font-medium">Neural Networks</span>
+<span class="text-sm text-cyan-400">88/100</span>
+</div>
+<div class="h-1.5 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-cyan-400 group-hover:bg-cyan-300 transition-all" style="width: 88%"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between mb-2">
+<span class="text-sm font-medium">Graph Theory</span>
+<span class="text-sm text-cyan-400">76/100</span>
+</div>
+<div class="h-1.5 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-cyan-400 group-hover:bg-cyan-300 transition-all" style="width: 76%"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between mb-2">
+<span class="text-sm font-medium">Cloud Architecture</span>
+<span class="text-sm text-cyan-400">95/100</span>
+</div>
+<div class="h-1.5 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-cyan-400 group-hover:bg-cyan-300 transition-all" style="width: 95%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. Quick Actions (2x1) -->
+<div class="md:col-span-2 lg:col-span-2 glass-card rounded-3xl p-8 bg-gradient-to-br from-cyan-950/20 to-purple-950/20 flex flex-col justify-center items-center text-center">
+<div class="w-16 h-16 bg-primary-container/20 rounded-2xl flex items-center justify-center mb-4 text-cyan-400 glow-cyan">
+<span class="material-symbols-outlined text-4xl" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<h3 class="font-headline-sm text-white mb-2">Ready for Next?</h3>
+<p class="text-sm text-slate-400 mb-6 max-w-xs">Push your boundaries with a diagnostic mastery assessment.</p>
+<button class="w-full py-4 bg-primary-container text-on-primary font-bold rounded-2xl flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+<span class="material-symbols-outlined text-xl" data-icon="play_circle">play_circle</span>
+                        Start New Test
+                    </button>
+</div>
+<!-- 3. Skill Gap Analysis (3x2) -->
+<div class="md:col-span-3 lg:col-span-3 glass-card rounded-3xl p-8">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="font-headline-sm text-on-surface">Skill Gap Analysis</h2>
+<p class="text-sm text-on-surface-variant">Critical path for career acceleration</p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-error-container/20 text-error text-[10px] font-bold uppercase rounded-full border border-error/20">Critical</span>
+<span class="px-3 py-1 bg-secondary-container/20 text-secondary text-[10px] font-bold uppercase rounded-full border border-secondary/20">Learning</span>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-error/50 transition-colors group">
+<div class="flex items-start justify-between mb-4">
+<div class="p-2 bg-error-container/30 rounded-lg text-error">
+<span class="material-symbols-outlined text-xl" data-icon="psychology">psychology</span>
+</div>
+<span class="text-error font-bold">-24% Gap</span>
+</div>
+<h4 class="font-bold text-white mb-1">Advanced Statistics</h4>
+<p class="text-xs text-slate-500 mb-4">Bayesian inference models and predictive analysis.</p>
+<div class="flex gap-1.5 flex-wrap">
+<span class="text-[10px] bg-white/5 px-2 py-0.5 rounded-full text-slate-300">P-Values</span>
+<span class="text-[10px] bg-white/5 px-2 py-0.5 rounded-full text-slate-300">Hypothesis Testing</span>
+</div>
+</div>
+<div class="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-cyan-400/50 transition-colors group">
+<div class="flex items-start justify-between mb-4">
+<div class="p-2 bg-primary-container/20 rounded-lg text-cyan-400">
+<span class="material-symbols-outlined text-xl" data-icon="database">database</span>
+</div>
+<span class="text-cyan-400 font-bold">-12% Gap</span>
+</div>
+<h4 class="font-bold text-white mb-1">Distributed Systems</h4>
+<p class="text-xs text-slate-500 mb-4">CAP theorem, consistency levels, and sharding.</p>
+<div class="flex gap-1.5 flex-wrap">
+<span class="text-[10px] bg-white/5 px-2 py-0.5 rounded-full text-slate-300">Raft</span>
+<span class="text-[10px] bg-white/5 px-2 py-0.5 rounded-full text-slate-300">Kafka</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 5. Recommended Resources (3x2) -->
+<div class="md:col-span-3 lg:col-span-3 glass-card rounded-3xl p-8">
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-headline-sm text-on-surface">Curated Mastery</h2>
+<button class="text-xs font-bold text-cyan-400 hover:underline">View All Library</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="group cursor-pointer">
+<div class="relative rounded-2xl overflow-hidden aspect-video mb-3">
+<img alt="Mastering Statistics" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="High-quality professional video thumbnail showing complex mathematical formulas on a digital glass board with neon blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBP166E2F847bDSzPugjd2HR2t_lGgNMH-GqrXQ-NvjWuBMNyD_jsqOgm4ojN5XL9YJmW7681ulY-Nrf5uHb4Eyf8i4TX_c5PhEAgb1R43lhef87cRVBcLUgK-tfsBEh4OyGCtmYlc4JSzuJX1TIMddoXqoWcVObbZBn2bS0SJTS1HQXsRuYbLdbqnQ4j402-sxUyvp3ap5eM3_-vcOFc6N9qRSOz8QmcvCw8phOb1TZahZDLk4GlILTriSQ98VxU-6ZzHg-ak8RT9f"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="play_arrow">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/80 px-2 py-0.5 rounded text-[10px] font-bold text-white">18:42</div>
+</div>
+<h4 class="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">Bayesian Theory Deep Dive</h4>
+<p class="text-xs text-slate-500">MIT OpenCourseWare • 420K views</p>
+</div>
+<div class="group cursor-pointer">
+<div class="relative rounded-2xl overflow-hidden aspect-video mb-3">
+<img alt="Systems Design" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Abstract data visualization with flowing lines of light representing information flow in a distributed computing network" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfYzVr2fXvjcH5QfO4wyK-xXBziunjvVYd8kQXUsLU8anp53siiDowkPSnVNwFSfJRQuNsASr8jcv_A-y3r178qRzr6dyiThKkMvPMAOVoXMWdF9a1WrtEA7MOwb-efaQSZ0BCKgfQ_zh7uy4NnFHmAmrUoj4xWeBoGmfZgAfB9A1omUj3Wi53gjiGYxFRr48ndLKB0-TCJwMEV0FZv0Xu1ocRG4pGhVY-mzCVp1qu2cq9G_jXf5IuBeP9af-OahC032dqwqG8MUiK"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="play_arrow">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/80 px-2 py-0.5 rounded text-[10px] font-bold text-white">24:15</div>
+</div>
+<h4 class="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">Distributed Ledger Protocols</h4>
+<p class="text-xs text-slate-500">Computer Science Focus • 1.2M views</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation Shell -->
+<div class="md:hidden fixed bottom-0 left-0 w-full bg-slate-950/80 backdrop-blur-2xl border-t border-white/10 flex justify-around items-center h-16 z-50">
+<a class="flex flex-col items-center gap-1 text-cyan-400" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] uppercase font-bold tracking-tighter">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="text-[10px] uppercase font-bold tracking-tighter">Map</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span class="text-[10px] uppercase font-bold tracking-tighter">Test</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-[10px] uppercase font-bold tracking-tighter">Profile</span>
+</a>
+</div>
+</body></html>

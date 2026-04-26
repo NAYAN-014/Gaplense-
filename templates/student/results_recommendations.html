@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Results — {{ skill }}{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto pb-20">
+  <div class="flex items-center gap-3 mb-6">
+    <a href="{{ url_for('skill_map') }}" class="text-slate-400 hover:text-white transition-colors"><span class="material-symbols-outlined">arrow_back</span></a>
+    <div>
+      <h1 class="text-2xl font-bold text-white font-['Space_Grotesk']">{{ skill }} — Results</h1>
+      <p class="text-slate-400 text-sm">Your diagnostic performance and recommendations</p>
+    </div>
+  </div>
+
+  {% if result %}
+  <!-- Score Card -->
+  <div class="glass-card rounded-2xl p-8 mb-6 border-l-4 {% if not result.gap_identified %}border-l-cyan-400{% else %}border-l-red-500{% endif %}">
+    <div class="flex flex-col md:flex-row items-center gap-8">
+      <div class="relative w-36 h-36 flex-shrink-0">
+        <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="transparent" stroke="rgba(255,255,255,0.05)" stroke-width="10"/>
+          <circle cx="60" cy="60" r="50" fill="transparent"
+            stroke="{% if not result.gap_identified %}#00f0ff{% else %}#f87171{% endif %}"
+            stroke-width="10" stroke-linecap="round"
+            stroke-dasharray="314.16"
+            stroke-dashoffset="{{ 314.16 * (1 - result.score / 100) }}"/>
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span class="text-3xl font-bold {% if not result.gap_identified %}text-cyan-400{% else %}text-red-400{% endif %} font-['Space_Grotesk']">{{ result.score|round|int }}%</span>
+          <span class="text-[10px] text-slate-500 uppercase tracking-wider">Score</span>
+        </div>
+      </div>
+      <div class="flex-1 text-center md:text-left">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-3 {% if not result.gap_identified %}bg-cyan-500/15 border border-cyan-500/30 text-cyan-400{% else %}bg-red-500/15 border border-red-500/30 text-red-400{% endif %} font-['Space_Grotesk'] font-bold text-sm">
+          <span class="material-symbols-outlined text-base">{% if not result.gap_identified %}verified{% else %}warning{% endif %}</span>
+          {% if not result.gap_identified %}Skill Mastered{% else %}Gap Identified{% endif %}
+        </div>
+        <h2 class="text-xl font-bold text-white font-['Space_Grotesk'] mb-2">{{ skill }}</h2>
+        {% if result.get('gemini_insight') %}
+        <p class="text-slate-300 text-sm leading-relaxed italic border-l-2 border-purple-500/50 pl-3">✦ {{ result.gemini_insight }}</p>
+        {% endif %}
+        <div class="flex flex-wrap gap-3 mt-4">
+          <a href="{{ url_for('test_selection') }}" class="px-4 py-2 bg-surface-container border border-white/10 text-slate-300 text-sm font-['Space_Grotesk'] rounded-xl hover:bg-white/5 transition-all">Retry Test</a>
+          {% if result.gap_identified %}<a href="{{ url_for('video_recommendations') }}" class="px-4 py-2 bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 text-sm font-['Space_Grotesk'] font-bold rounded-xl hover:bg-cyan-500/30 transition-all">Watch Recommended Videos</a>{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if videos %}
+  <!-- Video Recommendations -->
+  <div class="glass-card rounded-2xl p-8">
+    <h2 class="font-['Space_Grotesk'] font-bold text-white text-lg mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-400">play_circle</span>Recommended Videos — {{ skill }}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {% for v in videos %}
+      <a href="https://youtube.com/watch?v={{ v.id }}" target="_blank" class="group block rounded-xl overflow-hidden bg-surface-container border border-white/5 hover:border-cyan-500/30 transition-all">
+        <div class="relative aspect-video overflow-hidden">
+          <img src="{{ v.thumbnail }}" alt="{{ v.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+          <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center"><span class="material-symbols-outlined text-white text-2xl">play_arrow</span></div>
+          </div>
+        </div>
+        <div class="p-3">
+          <h4 class="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-2 mb-1">{{ v.title }}</h4>
+          <p class="text-xs text-slate-500">{{ v.channel }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="glass-card rounded-2xl p-16 text-center">
+    <span class="material-symbols-outlined text-6xl text-slate-600 mb-4 block">quiz</span>
+    <h2 class="font-['Space_Grotesk'] text-xl text-white mb-2">No Results Found</h2>
+    <p class="text-slate-400 mb-6">You haven't completed a test for {{ skill }} yet.</p>
+    <a href="{{ url_for('test_selection') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-container text-on-primary font-['Space_Grotesk'] font-bold rounded-xl hover:brightness-110 transition-all glow-cyan"><span class="material-symbols-outlined">quiz</span>Take Assessment</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

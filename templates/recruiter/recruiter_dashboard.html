@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Recruiter Dashboard{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto pb-20">
+  <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+    <div>
+      <h1 class="text-2xl font-bold text-white font-['Space_Grotesk']">Recruiter Dashboard</h1>
+      <p class="text-slate-400 text-sm mt-1">Find and verify top talent with diagnostic-backed profiles</p>
+    </div>
+    <div class="flex gap-3">
+      <a href="{{ url_for('recruiter_post_job') }}" class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-['Space_Grotesk'] font-bold rounded-xl hover:brightness-110 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-base">post_add</span>Post a Job
+      </a>
+      <a href="{{ url_for('talent_discovery') }}" class="px-4 py-2 bg-white/5 border border-white/10 text-white text-sm font-['Space_Grotesk'] font-bold rounded-xl hover:bg-white/10 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-base">manage_search</span>Search Talent
+      </a>
+    </div>
+  </div>
+
+  <!-- Real Stats -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="glass-card rounded-2xl p-6 text-center">
+      <span class="material-symbols-outlined text-2xl text-cyan-400 mb-2 block">people</span>
+      <div class="text-2xl font-bold text-cyan-400 font-['Space_Grotesk']">{{ total_candidates }}</div>
+      <div class="text-slate-500 text-xs mt-1 font-['Space_Grotesk'] uppercase tracking-wide">Candidates</div>
+    </div>
+    <div class="glass-card rounded-2xl p-6 text-center">
+      <span class="material-symbols-outlined text-2xl text-green-400 mb-2 block">verified</span>
+      <div class="text-2xl font-bold text-green-400 font-['Space_Grotesk']">{{ total_verified }}</div>
+      <div class="text-slate-500 text-xs mt-1 font-['Space_Grotesk'] uppercase tracking-wide">Verified Skills</div>
+    </div>
+    <div class="glass-card rounded-2xl p-6 text-center">
+      <span class="material-symbols-outlined text-2xl text-purple-400 mb-2 block">analytics</span>
+      <div class="text-2xl font-bold text-purple-400 font-['Space_Grotesk']">{{ avg_score }}%</div>
+      <div class="text-slate-500 text-xs mt-1 font-['Space_Grotesk'] uppercase tracking-wide">Avg Score</div>
+    </div>
+    <div class="glass-card rounded-2xl p-6 text-center">
+      <span class="material-symbols-outlined text-2xl text-yellow-400 mb-2 block">work</span>
+      <div class="text-2xl font-bold text-yellow-400 font-['Space_Grotesk']">{{ my_jobs_count }}</div>
+      <div class="text-slate-500 text-xs mt-1 font-['Space_Grotesk'] uppercase tracking-wide">My Jobs Posted</div>
+    </div>
+  </div>
+
+  <!-- Quick Search -->
+  <div class="glass-card rounded-2xl p-6 mb-6">
+    <h2 class="font-['Space_Grotesk'] font-bold text-white text-lg mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-cyan-400">person_search</span>Quick Talent Search
+    </h2>
+    <form method="GET" action="{{ url_for('talent_discovery') }}" class="flex gap-3">
+      <input name="skill" type="text" placeholder="Search by skill: Python, React, Data Science…"
+        class="flex-1 bg-surface-container border border-white/10 text-white text-sm rounded-xl px-4 py-3 outline-none focus:border-cyan-500/50 placeholder:text-slate-600 font-['Inter']"/>
+      <button type="submit" class="px-5 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-['Space_Grotesk'] font-bold rounded-xl hover:brightness-110 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined">search</span>Search
+      </button>
+    </form>
+    <div class="flex flex-wrap gap-2 mt-3">
+      {% for tag in ['Python','Java','C++','Data Science','JavaScript','System Design'] %}
+      <a href="{{ url_for('talent_discovery') }}?skill={{ tag }}"
+        class="px-3 py-1 rounded-full text-xs font-['Space_Grotesk'] border border-white/10 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-all">{{ tag }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Top Candidates (Real Data) -->
+  <div class="glass-card rounded-2xl overflow-hidden">
+    <div class="px-8 py-5 border-b border-white/5 flex items-center justify-between">
+      <h2 class="font-['Space_Grotesk'] font-bold text-white text-lg flex items-center gap-2">
+        <span class="material-symbols-outlined text-cyan-400">leaderboard</span>Top Candidates (Real Data)
+      </h2>
+      <a href="{{ url_for('talent_discovery') }}" class="text-cyan-400 text-xs font-['Space_Grotesk'] hover:underline">View All →</a>
+    </div>
+    {% if top_candidates %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead><tr class="bg-surface-container-high/50 text-[10px] text-zinc-500 uppercase font-['Space_Grotesk'] border-b border-white/5">
+          <th class="px-8 py-4">Candidate</th>
+          <th class="px-8 py-4">Skill</th>
+          <th class="px-8 py-4">Score</th>
+          <th class="px-8 py-4">Level</th>
+          <th class="px-8 py-4">Status</th>
+          <th class="px-8 py-4 text-right">Action</th>
+        </tr></thead>
+        <tbody class="text-sm">
+          {% for c in top_candidates %}
+          <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+            <td class="px-8 py-5">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white font-['Space_Grotesk'] font-bold text-sm">{{ c.name[0].upper() if c.name else '?' }}</div>
+                <span class="text-white font-medium">{{ c.name }}</span>
+              </div>
+            </td>
+            <td class="px-8 py-5"><span class="px-2 py-1 bg-surface-container-high rounded text-slate-300 text-xs">{{ c.skill }}</span></td>
+            <td class="px-8 py-5"><span class="font-bold {% if c.score>=80 %}text-green-400{% elif c.score>=60 %}text-yellow-400{% else %}text-red-400{% endif %}">{{ c.score }}%</span></td>
+            <td class="px-8 py-5"><span class="text-slate-300 text-xs">{{ c.level }}</span></td>
+            <td class="px-8 py-5">
+              <span class="px-2 py-1 text-[10px] font-bold rounded uppercase {% if c.badge=='Verified' %}bg-green-500/10 text-green-400{% else %}bg-yellow-500/10 text-yellow-400{% endif %}">{{ c.badge }}</span>
+            </td>
+            <td class="px-8 py-5 text-right">
+              <a href="{{ url_for('talent_discovery') }}?skill={{ c.skill }}" class="text-cyan-400 text-xs hover:underline">Search Similar →</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-12 text-center">
+      <span class="material-symbols-outlined text-5xl text-slate-600 mb-3 block">people_outline</span>
+      <p class="text-slate-400 text-sm">No candidates have taken assessments yet.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

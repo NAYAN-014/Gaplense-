@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Create Account{% endblock %}
+
+{% block auth_content %}
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem;">
+  <div style="width:min(32rem,100%); position:relative; z-index:1;">
+
+    <div class="text-center mb-8">
+      <div style="width:3rem; height:3rem; background:linear-gradient(135deg,var(--cyan-dim),var(--purple)); border-radius:0.875rem; display:inline-flex; align-items:center; justify-content:center; margin-bottom:1rem;">
+        <span class="material-symbols-outlined icon-fill" style="color:#fff; font-size:1.5rem;">person_add</span>
+      </div>
+      <h1 class="text-headline" style="color:#fff;">Join GapLens</h1>
+      <p class="text-muted mt-2" style="font-size:0.9rem;">Create your account and start closing skill gaps</p>
+    </div>
+
+    <div class="glass-card" style="padding:2.5rem;">
+      <form method="POST" action="{{ url_for('signup') }}">
+        <div style="display:flex; flex-direction:column; gap:1.75rem;">
+
+          <div class="input-group">
+            <label for="name">Full Name</label>
+            <input class="input-field" id="name" name="name" type="text" placeholder="Alex Rivera" required/>
+          </div>
+
+          <div class="input-group">
+            <label for="email">Email Address</label>
+            <input class="input-field" id="email" name="email" type="email" placeholder="alex@university.edu" required/>
+          </div>
+
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input class="input-field" id="password" name="password" type="password" placeholder="Min. 8 characters" required/>
+          </div>
+
+          <!-- Role selector -->
+          <div class="input-group">
+            <label>I am a…</label>
+            <div class="flex gap-4 mt-2">
+              <label style="flex:1; cursor:pointer;">
+                <input type="radio" name="role" value="student" id="role-student" style="display:none;" checked/>
+                <div class="glass-card role-pill" id="pill-student" onclick="selectRole('student')"
+                  style="padding:0.875rem; text-align:center; border-color:rgba(0,240,255,0.35); cursor:pointer;">
+                  <span class="material-symbols-outlined" style="color:var(--cyan); display:block; margin-bottom:0.25rem;">school</span>
+                  <span style="font-family:var(--font-head); font-size:0.8rem; font-weight:600; color:var(--cyan);">Student</span>
+                </div>
+              </label>
+              <label style="flex:1; cursor:pointer;">
+                <input type="radio" name="role" value="recruiter" id="role-recruiter" style="display:none;"/>
+                <div class="glass-card role-pill" id="pill-recruiter" onclick="selectRole('recruiter')"
+                  style="padding:0.875rem; text-align:center; cursor:pointer;">
+                  <span class="material-symbols-outlined" style="color:var(--on-muted); display:block; margin-bottom:0.25rem;">business_center</span>
+                  <span style="font-family:var(--font-head); font-size:0.8rem; font-weight:600; color:var(--on-muted);">Recruiter</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-full" style="height:3.2rem; font-size:0.95rem; margin-top:0.5rem;">
+            <span class="material-symbols-outlined">rocket_launch</span>
+            CREATE ACCOUNT
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="text-center mt-6" style="font-size:0.875rem; color:var(--on-muted);">
+      Already have an account?
+      <a href="{{ url_for('login') }}" style="color:var(--cyan-dim); text-decoration:none; font-weight:600;"> Sign In</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectRole(role) {
+  ['student','recruiter'].forEach(r => {
+    const pill = document.getElementById('pill-'+r);
+    const icon = pill.querySelector('.material-symbols-outlined');
+    const label = pill.querySelector('span:last-child');
+    if (r === role) {
+      pill.style.borderColor = 'rgba(0,240,255,0.35)';
+      icon.style.color = 'var(--cyan)';
+      label.style.color = 'var(--cyan)';
+    } else {
+      pill.style.borderColor = 'rgba(255,255,255,0.08)';
+      icon.style.color = 'var(--on-muted)';
+      label.style.color = 'var(--on-muted)';
+    }
+  });
+  document.getElementById('role-'+role).checked = true;
+}
+</script>
+{% endblock %}

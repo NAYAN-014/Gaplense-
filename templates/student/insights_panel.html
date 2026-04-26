@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Market Insights{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto pb-20">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-white font-['Space_Grotesk']">Market Insights</h1>
+    <p class="text-slate-400 text-sm mt-1">Trending skills based on platform activity</p>
+  </div>
+  {% if trending %}
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    {% for t in trending %}
+    <div class="glass-card rounded-2xl p-5 flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-cyan-400">trending_up</span>
+      </div>
+      <div class="flex-1">
+        <div class="flex justify-between mb-1">
+          <span class="text-white font-['Space_Grotesk'] font-bold">{{ t._id }}</span>
+          <span class="text-cyan-400 text-sm font-bold">{{ t.avg_score|round|int }}% avg</span>
+        </div>
+        <div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+          <div class="h-full bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full" style="width:{{ t.avg_score|round|int }}%"></div>
+        </div>
+        <p class="text-slate-500 text-xs mt-1">{{ t.attempts }} attempts on platform</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="glass-card rounded-2xl p-16 text-center">
+    <span class="material-symbols-outlined text-6xl text-slate-600 mb-4 block">trending_up</span>
+    <h2 class="font-['Space_Grotesk'] text-xl text-white mb-2">No Data Yet</h2>
+    <p class="text-slate-400">Take assessments to generate market insights.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

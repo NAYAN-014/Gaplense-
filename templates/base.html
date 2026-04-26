@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="dark" id="gl-root" lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>{% block title %}GapLens{% endblock %} — GapLens</title>
+<meta name="description" content="{% block meta_desc %}GapLens: Skill Diagnostic & Employment Platform{% endblock %}"/>
+<script>if(localStorage.getItem('gl-theme')==='light')document.getElementById('gl-root').classList.remove('dark')</script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tw-cfg">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{
+  "surface":"#101415","surface-container":"#1d2022","surface-container-high":"#272a2c","surface-container-highest":"#323537",
+  "on-surface":"#e0e3e5","on-surface-variant":"#b9cacb","outline":"#849495","outline-variant":"#3b494b",
+  "primary":"#dbfcff","primary-container":"#00f0ff","on-primary":"#00363a","on-primary-container":"#006970",
+  "secondary":"#ebb2ff","secondary-container":"#b600f8","on-secondary":"#520072","on-secondary-container":"#fff6fc",
+  "background":"#101415","surface-bright":"#363a3b","error":"#ffb4ab","error-container":"#93000a"
+},fontFamily:{"body-md":["Inter"],"body-lg":["Inter"],"headline-sm":["Space Grotesk"],"headline-md":["Space Grotesk"],"label-caps":["Space Grotesk"],"display-lg":["Space Grotesk"]},
+fontSize:{"body-md":["16px",{lineHeight:"1.6",fontWeight:"400"}],"body-lg":["18px",{lineHeight:"1.6",fontWeight:"400"}],"headline-sm":["24px",{lineHeight:"1.3",fontWeight:"500"}],"headline-md":["32px",{lineHeight:"1.2",fontWeight:"600"}],"label-caps":["12px",{lineHeight:"1.0",letterSpacing:"0.1em",fontWeight:"700"}]}}}}
+</script>
+<style>
+.glass-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);box-shadow:0 8px 32px rgba(0,0,0,0.35)}
+.glass-card:hover{border-color:rgba(0,240,255,0.25);background:rgba(255,255,255,0.05)}
+.glow-cyan{box-shadow:0 0 20px rgba(0,219,233,0.25)}
+.nav-link{display:flex;align-items:center;gap:0.65rem;padding:0.6rem 0.75rem;border-radius:0.6rem;font-size:0.82rem;font-weight:500;font-family:'Space Grotesk',sans-serif;color:#94a3b8;text-decoration:none;transition:all 0.22s ease;margin-bottom:2px}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,0.06)}
+.nav-link.active{color:#22d3ee;background:rgba(34,211,238,0.1);border-right:2px solid #22d3ee}
+.nav-link .material-symbols-outlined{font-size:1.1rem}
+.nav-section{font-size:0.58rem;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#475569;padding:0.8rem 0.75rem 0.3rem;display:block}
+/* Light mode */
+html:not(.dark) body{background:#f0f9ff!important;color:#0a2530!important}
+html:not(.dark) #gl-sidebar{background:rgba(240,249,255,0.92)!important;border-color:rgba(0,219,233,0.15)!important}
+html:not(.dark) #gl-topbar{background:rgba(240,249,255,0.75)!important;border-color:rgba(0,219,233,0.12)!important}
+html:not(.dark) .glass-card{background:rgba(255,255,255,0.75)!important;border-color:rgba(0,200,220,0.15)!important}
+html:not(.dark) .nav-link{color:#334155!important}
+html:not(.dark) .nav-link:hover{color:#0a2530!important;background:rgba(0,150,180,0.08)!important}
+html:not(.dark) .nav-link.active{color:#0077a8!important;background:rgba(0,150,180,0.1)!important;border-color:#0077a8!important}
+html:not(.dark) .text-white{color:#0a2530!important}
+html:not(.dark) .text-slate-400{color:#334155!important}
+html:not(.dark) .text-slate-500{color:#475569!important}
+html:not(.dark) .bg-surface{background:#f0f9ff!important}
+html:not(.dark) .bg-slate-950\/40{background:rgba(220,240,255,0.7)!important}
+html:not(.dark) .bg-slate-950\/80{background:rgba(220,240,255,0.88)!important}
+html:not(.dark) .border-white\/10{border-color:rgba(0,150,180,0.12)!important}
+html:not(.dark) .bg-white\/5{background:rgba(0,150,180,0.06)!important}
+html:not(.dark) .nav-section{color:#94a3b8!important}
+{% block extra_styles %}{% endblock %}
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden selection:bg-primary-container/30 min-h-screen">
+
+{% if session.get('user_id') %}
+<!-- ═══ SIDEBAR ═══ -->
+<nav id="gl-sidebar" class="fixed left-0 top-0 h-full w-64 flex flex-col p-4 bg-slate-950/50 backdrop-blur-xl border-r border-white/10 z-50 hidden md:flex overflow-y-auto">
+  <div class="mb-6 px-2 flex flex-col items-center text-center">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="GapLens" class="h-20 w-auto mb-2"/>
+    <p class="text-slate-500 text-[11px] font-['Space_Grotesk']">Hi, {{ session.get('name','User') }} 👋</p>
+  </div>
+
+  {% if session.get('role') == 'student' %}
+  <span class="nav-section">Main</span>
+  <a href="{{ url_for('student_dashboard') }}" class="nav-link {% if request.endpoint=='student_dashboard' %}active{% endif %}"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+  <a href="{{ url_for('student_profile') }}" class="nav-link {% if request.endpoint=='student_profile' %}active{% endif %}"><span class="material-symbols-outlined">account_circle</span>Profile</a>
+
+  <span class="nav-section">Assess & Learn</span>
+  <a href="{{ url_for('test_selection') }}" class="nav-link {% if request.endpoint=='test_selection' %}active{% endif %}"><span class="material-symbols-outlined">quiz</span>Assessments</a>
+  <a href="{{ url_for('skill_map') }}" class="nav-link {% if request.endpoint=='skill_map' %}active{% endif %}"><span class="material-symbols-outlined">hub</span>Skill Map</a>
+  <a href="{{ url_for('deep_insights') }}" class="nav-link {% if request.endpoint=='deep_insights' %}active{% endif %}"><span class="material-symbols-outlined">analytics</span>Insights</a>
+  <a href="{{ url_for('curated_resources') }}" class="nav-link {% if request.endpoint=='curated_resources' %}active{% endif %}"><span class="material-symbols-outlined">menu_book</span>Resources</a>
+  <a href="{{ url_for('video_recommendations') }}" class="nav-link {% if request.endpoint=='video_recommendations' %}active{% endif %}"><span class="material-symbols-outlined">play_circle</span>Videos</a>
+
+  <span class="nav-section">Career</span>
+  <a href="{{ url_for('jobs') }}" class="nav-link {% if request.endpoint=='jobs' %}active{% endif %}"><span class="material-symbols-outlined">work</span>Jobs</a>
+  <a href="{{ url_for('skill_gap_analysis') }}" class="nav-link {% if request.endpoint=='skill_gap_analysis' %}active{% endif %}"><span class="material-symbols-outlined">troubleshoot</span>Gap Analysis</a>
+  <a href="{{ url_for('profile_management') }}" class="nav-link {% if request.endpoint=='profile_management' %}active{% endif %}"><span class="material-symbols-outlined">description</span>My Resume</a>
+  <a href="{{ url_for('insights_panel') }}" class="nav-link {% if request.endpoint=='insights_panel' %}active{% endif %}"><span class="material-symbols-outlined">trending_up</span>Market Insights</a>
+
+  <span class="nav-section">Connect</span>
+  <a href="{{ url_for('community') }}" class="nav-link {% if request.endpoint=='community' %}active{% endif %}"><span class="material-symbols-outlined">groups</span>Community</a>
+
+  {% elif session.get('role') == 'recruiter' %}
+  <span class="nav-section">Recruiter</span>
+  <a href="{{ url_for('recruiter_dashboard') }}" class="nav-link {% if request.endpoint=='recruiter_dashboard' %}active{% endif %}"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+  <a href="{{ url_for('talent_discovery') }}" class="nav-link {% if request.endpoint=='talent_discovery' %}active{% endif %}"><span class="material-symbols-outlined">manage_search</span>Talent Search</a>
+  <a href="{{ url_for('recruiter_post_job') }}" class="nav-link {% if request.endpoint=='recruiter_post_job' %}active{% endif %}"><span class="material-symbols-outlined">post_add</span>Post a Job</a>
+  <a href="{{ url_for('recruiter_my_jobs') }}" class="nav-link {% if request.endpoint=='recruiter_my_jobs' %}active{% endif %}"><span class="material-symbols-outlined">work_history</span>My Jobs</a>
+  <a href="{{ url_for('community') }}" class="nav-link {% if request.endpoint=='community' %}active{% endif %}"><span class="material-symbols-outlined">groups</span>Community</a>
+
+  {% elif session.get('role') == 'admin' %}
+  <span class="nav-section">Admin</span>
+  <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint=='admin_dashboard' %}active{% endif %}"><span class="material-symbols-outlined">admin_panel_settings</span>Admin Panel</a>
+  {% endif %}
+
+  <div class="mt-auto pt-4 border-t border-white/10 space-y-0.5">
+    <a href="{{ url_for('edit_profile') }}" class="nav-link"><span class="material-symbols-outlined">manage_accounts</span>Edit Profile</a>
+    <button onclick="glToggleTheme()" class="nav-link w-full text-left"><span class="material-symbols-outlined" id="gl-theme-icon">light_mode</span><span id="gl-theme-label">Light Mode</span></button>
+    <a href="{{ url_for('logout') }}" class="nav-link" style="color:#f87171!important"><span class="material-symbols-outlined">logout</span>Sign Out</a>
+  </div>
+</nav>
+
+<!-- ═══ TOPBAR ═══ -->
+<header id="gl-topbar" class="fixed top-0 left-0 md:left-64 right-0 h-14 bg-slate-950/30 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-6 z-40">
+  <div class="flex items-center gap-3">
+    <span class="text-lg font-black text-cyan-400 md:hidden font-['Space_Grotesk']">GapLens</span>
+    <div class="hidden md:flex items-center bg-white/5 border border-white/10 rounded-full px-4 py-1.5 focus-within:ring-1 focus-within:ring-cyan-500/40">
+      <span class="material-symbols-outlined text-slate-500 text-sm">search</span>
+      <input class="bg-transparent border-none outline-none text-xs text-white placeholder:text-slate-600 w-56 ml-2" placeholder="Search skills, courses…" type="text"/>
+    </div>
+  </div>
+  <div class="flex items-center gap-4">
+    <span class="material-symbols-outlined text-slate-400 hover:text-cyan-300 cursor-pointer text-xl">notifications</span>
+    <div class="text-right hidden sm:block">
+      <p class="text-xs font-bold text-white font-['Space_Grotesk']">{{ session.get('name','User') }}</p>
+      <p class="text-[10px] text-slate-500 uppercase tracking-wide">{{ session.get('role','student') | capitalize }}</p>
+    </div>
+    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center font-bold text-white font-['Space_Grotesk'] text-sm">{{ session.get('name','U')[0].upper() }}</div>
+    <a href="{{ url_for('logout') }}" class="px-3 py-1.5 rounded-lg border border-red-500/30 text-red-400 text-xs font-['Space_Grotesk'] hover:bg-red-500/10 transition-all">Logout</a>
+  </div>
+</header>
+
+<!-- ═══ FLASH MESSAGES ═══ -->
+<div class="fixed top-16 left-0 md:left-64 right-0 z-30 px-6 pt-2 pointer-events-none">
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% if msgs %}{% for cat,msg in msgs %}
+      <div class="mb-2 px-4 py-3 rounded-xl text-sm font-medium pointer-events-auto
+           {% if cat=='error' %}bg-red-500/15 border border-red-500/30 text-red-300
+           {% else %}bg-cyan-500/15 border border-cyan-500/30 text-cyan-300{% endif %}">{{ msg }}</div>
+    {% endfor %}{% endif %}
+  {% endwith %}
+</div>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="md:ml-64 mt-14 min-h-[calc(100vh-3.5rem)] bg-surface p-6">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- Mobile bottom nav -->
+<div class="md:hidden fixed bottom-0 left-0 w-full bg-slate-950/85 backdrop-blur-2xl border-t border-white/10 flex justify-around items-center h-16 z-50">
+  {% if session.get('role')=='student' %}
+  <a href="{{ url_for('student_dashboard') }}" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-cyan-400 transition-colors"><span class="material-symbols-outlined text-xl">dashboard</span><span class="text-[9px] font-bold font-['Space_Grotesk'] uppercase">Home</span></a>
+  <a href="{{ url_for('skill_map') }}" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-cyan-400 transition-colors"><span class="material-symbols-outlined text-xl">hub</span><span class="text-[9px] font-bold font-['Space_Grotesk'] uppercase">Map</span></a>
+  <a href="{{ url_for('test_selection') }}" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-cyan-400 transition-colors"><span class="material-symbols-outlined text-xl">quiz</span><span class="text-[9px] font-bold font-['Space_Grotesk'] uppercase">Test</span></a>
+  <a href="{{ url_for('jobs') }}" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-cyan-400 transition-colors"><span class="material-symbols-outlined text-xl">work</span><span class="text-[9px] font-bold font-['Space_Grotesk'] uppercase">Jobs</span></a>
+  <a href="{{ url_for('student_profile') }}" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-cyan-400 transition-colors"><span class="material-symbols-outlined text-xl">account_circle</span><span class="text-[9px] font-bold font-['Space_Grotesk'] uppercase">Profile</span></a>
+  {% elif session.get('role')=='recruiter' %}
+  <a href="{{ url_for('recruiter_dashboard') }}" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-cyan-400 transition-colors"><span class="material-symbols-outlined text-xl">dashboard</span><span class="text-[9px] font-bold font-['Space_Grotesk'] uppercase">Home</span></a>
+  <a href="{{ url_for('talent_discovery') }}" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-cyan-400 transition-colors"><span class="material-symbols-outlined text-xl">manage_search</span><span class="text-[9px] font-bold font-['Space_Grotesk'] uppercase">Search</span></a>
+  {% endif %}
+  <a href="{{ url_for('logout') }}" class="flex flex-col items-center gap-0.5 text-red-400 hover:text-red-300 transition-colors"><span class="material-symbols-outlined text-xl">logout</span><span class="text-[9px] font-bold font-['Space_Grotesk'] uppercase">Out</span></a>
+</div>
+
+{% else %}
+<!-- ═══ NO SESSION (login/signup pages) ═══ -->
+<main class="min-h-screen">
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% if msgs %}
+    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-80">
+      {% for cat,msg in msgs %}
+        <div class="mb-2 px-4 py-3 rounded-xl text-sm font-medium {% if cat=='error' %}bg-red-500/15 border border-red-500/30 text-red-300{% else %}bg-cyan-500/15 border border-cyan-500/30 text-cyan-300{% endif %}">{{ msg }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+  {% block auth_content %}{% endblock %}
+</main>
+{% endif %}
+
+{% block extra_scripts %}{% endblock %}
+<script>
+function glToggleTheme(){
+  const dark=document.getElementById('gl-root');
+  const isNowLight=dark.classList.toggle('dark')==false;
+  localStorage.setItem('gl-theme',isNowLight?'light':'dark');
+  document.getElementById('gl-theme-icon').textContent=isNowLight?'dark_mode':'light_mode';
+  document.getElementById('gl-theme-label').textContent=isNowLight?'Dark Mode':'Light Mode';
+}
+// Init icons on load
+(function(){
+  const light=localStorage.getItem('gl-theme')==='light';
+  const icon=document.getElementById('gl-theme-icon');
+  const label=document.getElementById('gl-theme-label');
+  if(icon){icon.textContent=light?'dark_mode':'light_mode';}
+  if(label){label.textContent=light?'Dark Mode':'Light Mode';}
+})();
+</script>
+</body>
+</html>

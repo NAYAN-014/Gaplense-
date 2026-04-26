@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% block title %}Sign In{% endblock %}
+{% block extra_styles %}
+/* Login light mode overrides */
+html:not(.dark) .login-bg{background:#e8f4fd!important}
+html:not(.dark) .login-left{background:linear-gradient(135deg,#dbeafe,#ede9fe)!important}
+html:not(.dark) .login-panel{background:rgba(255,255,255,0.95)!important;border-color:rgba(0,150,200,0.15)!important}
+html:not(.dark) .input-wrap{background:rgba(0,0,0,0.04)!important;border-color:rgba(0,150,200,0.2)!important}
+html:not(.dark) .input-wrap:focus-within{background:rgba(0,180,220,0.05)!important;border-color:rgba(0,180,220,0.5)!important;box-shadow:0 0 0 3px rgba(0,180,220,0.08)!important}
+html:not(.dark) .input-field{color:#0a2530!important}
+html:not(.dark) .input-field::placeholder{color:#94a3b8!important}
+html:not(.dark) .inp-icon{color:#64748b!important}
+html:not(.dark) .eye-btn{color:#64748b!important}
+html:not(.dark) .login-text-main{color:#0a2530!important}
+html:not(.dark) .login-text-muted{color:#475569!important}
+html:not(.dark) .login-stat-card{background:rgba(255,255,255,0.7)!important;border-color:rgba(0,150,200,0.2)!important}
+html:not(.dark) .login-divider{background:rgba(0,0,0,0.1)!important}
+html:not(.dark) .login-google-btn{background:rgba(255,255,255,0.9)!important;border-color:rgba(0,0,0,0.1)!important;color:#0a2530!important}
+html:not(.dark) .login-google-btn:hover{background:rgba(255,255,255,1)!important}
+html:not(.dark) .login-testimonial{background:rgba(255,255,255,0.6)!important;border-color:rgba(0,150,200,0.15)!important}
+html:not(.dark) .login-tag{background:rgba(139,92,246,0.1)!important;color:#7c3aed!important;border-color:rgba(139,92,246,0.2)!important}
+html:not(.dark) .login-progress-bg{background:rgba(0,0,0,0.06)!important}
+html:not(.dark) .login-toggle-btn{background:rgba(255,255,255,0.8)!important;border-color:rgba(0,150,200,0.2)!important;color:#0a2530!important}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes pulse-glow{0%,100%{opacity:0.4}50%{opacity:0.8}}
+@keyframes slide-in{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes orb-drift{0%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.05)}66%{transform:translate(-20px,15px) scale(0.97)}100%{transform:translate(0,0) scale(1)}}
+.float-card{animation:float 6s ease-in-out infinite}
+.float-card-2{animation:float 8s ease-in-out infinite reverse}
+.float-card-3{animation:float 5s ease-in-out infinite 2s}
+.slide-in{animation:slide-in 0.5s ease-out both}
+.orb-1{animation:orb-drift 15s ease-in-out infinite}
+.orb-2{animation:orb-drift 20s ease-in-out infinite reverse}
+.input-wrap{position:relative;display:flex;align-items:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:0.75rem;transition:all 0.25s ease}
+.input-wrap:focus-within{border-color:rgba(0,240,255,0.5);background:rgba(0,240,255,0.04);box-shadow:0 0 0 3px rgba(0,240,255,0.08)}
+.input-wrap .inp-icon{flex-shrink:0;padding:0 0.65rem 0 0.9rem;color:#64748b;font-size:1.15rem;line-height:1;font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;user-select:none;pointer-events:none}
+.input-field{background:transparent;border:none;outline:none;width:100%;padding:0.85rem 0.75rem 0.85rem 0;color:#e0e3e5;font-size:0.88rem;font-family:'Inter',sans-serif}
+.input-field::placeholder{color:#475569}
+.input-wrap .eye-btn{flex-shrink:0;padding:0 0.75rem;color:#64748b;cursor:pointer;background:none;border:none;line-height:1;display:flex;align-items:center;transition:color 0.2s}
+.input-wrap .eye-btn:hover{color:#94a3b8}
+.input-wrap .eye-btn .material-symbols-outlined{font-size:1.1rem;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+{% endblock %}
+{% block auth_content %}
+<!-- Floating theme toggle -->
+<button onclick="glToggleTheme()" class="login-toggle-btn fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md text-white text-xs font-['Space_Grotesk'] font-bold hover:bg-white/10 transition-all">
+  <span class="material-symbols-outlined text-base" id="gl-theme-icon">light_mode</span>
+  <span id="gl-theme-label">Light Mode</span>
+</button>
+<div class="login-bg min-h-screen flex bg-[#0b0f10] overflow-hidden">
+
+  <!-- ═══ LEFT PANEL — Branding ═══ -->
+  <div class="login-left hidden lg:flex lg:w-[55%] relative flex-col justify-between p-14 overflow-hidden">
+    <!-- Animated orbs -->
+    <div class="orb-1 absolute w-96 h-96 rounded-full -top-20 -left-20 opacity-30" style="background:radial-gradient(circle,rgba(0,219,233,0.4) 0%,transparent 70%)"></div>
+    <div class="orb-2 absolute w-80 h-80 rounded-full bottom-10 right-0 opacity-25" style="background:radial-gradient(circle,rgba(182,0,248,0.5) 0%,transparent 70%)"></div>
+    <div class="absolute inset-0" style="background:radial-gradient(ellipse at 20% 50%,rgba(0,219,233,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(182,0,248,0.06) 0%,transparent 60%)"></div>
+
+    <!-- Grid pattern overlay -->
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image:linear-gradient(rgba(255,255,255,0.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.5) 1px,transparent 1px);background-size:40px 40px"></div>
+
+    <!-- Logo & tagline -->
+    <div class="relative z-10">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="GapLens" class="h-24 w-auto mb-4"/>
+      <p class="text-slate-400 text-sm font-['Inter'] max-w-xs leading-relaxed">The intelligent platform bridging the gap between your skills and your dream career.</p>
+    </div>
+
+    <!-- Floating stat cards -->
+    <div class="relative z-10 flex-1 flex items-center justify-center">
+      <div class="relative w-full max-w-sm h-80">
+        <!-- Main card -->
+        <div class="float-card login-stat-card absolute inset-0 top-4 rounded-3xl p-6 border border-white/10" style="background:rgba(255,255,255,0.03);backdrop-filter:blur(20px)">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center"><span class="material-symbols-outlined text-cyan-400">hub</span></div>
+            <div><div class="text-white font-['Space_Grotesk'] font-bold text-sm">Skill Mastery</div><div class="text-slate-500 text-xs">Live Platform Data</div></div>
+          </div>
+          <div class="space-y-3">
+            {% for skill,pct,color in [('Python Engineering',94,'cyan'),('Data Science',88,'purple'),('System Design',76,'blue'),('Cloud Architecture',91,'cyan')] %}
+
+            <div>
+              <div class="flex justify-between mb-1"><span class="text-xs text-slate-300 font-['Inter']">{{ skill }}</span><span class="text-xs text-{{ color }}-400 font-bold">{{ pct }}%</span></div>
+              <div class="login-progress-bg h-1.5 bg-white/5 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-{{ color }}-400 to-{{ color }}-600 rounded-full" style="width:{{ pct }}%"></div></div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Floating mini-card 1 -->
+        <div class="float-card-2 login-stat-card absolute -top-6 -right-6 px-4 py-3 rounded-2xl border border-white/10 flex items-center gap-3" style="background:rgba(0,240,255,0.08);backdrop-filter:blur(16px)">
+          <span class="material-symbols-outlined text-cyan-400">verified</span>
+          <div><div class="text-white text-xs font-['Space_Grotesk'] font-bold">4,200+</div><div class="text-slate-500 text-[10px]">Verified Skills</div></div>
+        </div>
+
+        <!-- Floating mini-card 2 -->
+        <div class="float-card-3 login-stat-card absolute -bottom-4 -left-4 px-4 py-3 rounded-2xl border border-white/10 flex items-center gap-3" style="background:rgba(182,0,248,0.1);backdrop-filter:blur(16px)">
+          <span class="material-symbols-outlined text-purple-400">trending_up</span>
+          <div><div class="text-white text-xs font-['Space_Grotesk'] font-bold">92%</div><div class="text-slate-500 text-[10px]">Placement Rate</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom testimonial -->
+    <div class="relative z-10">
+      <div class="login-testimonial p-5 rounded-2xl border border-white/8" style="background:rgba(255,255,255,0.03)">
+        <p class="login-text-muted text-slate-300 text-sm font-['Inter'] italic mb-3">"GapLens helped me identify exact gaps in my resume and land my first role at a top startup within 3 months."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold font-['Space_Grotesk']">R</div>
+          <div><div class="text-white text-xs font-['Space_Grotesk'] font-bold">Rahul S.</div><div class="text-slate-500 text-[10px]">Software Engineer · Bangalore</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT PANEL — Login Form ═══ -->
+  <div class="w-full lg:w-[45%] flex items-center justify-center p-6 lg:p-16 relative">
+    <div class="absolute inset-0 lg:hidden" style="background:radial-gradient(ellipse at 50% 0%,rgba(0,219,233,0.08) 0%,transparent 60%)"></div>
+
+    <div class="login-panel w-full max-w-md slide-in relative z-10 bg-transparent rounded-3xl p-8" style="">
+      <!-- Mobile logo -->
+      <div class="lg:hidden text-center mb-8">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="GapLens" class="h-24 w-auto mx-auto mb-3"/>
+      </div>
+
+      <!-- Heading -->
+      <div class="mb-8">
+        <h1 class="login-text-main text-3xl font-bold text-white font-['Space_Grotesk'] mb-2">Welcome back</h1>
+        <p class="login-text-muted text-slate-400 text-sm font-['Inter']">Sign in to your GapLens account to continue</p>
+      </div>
+
+      <!-- Flash messages -->
+      {% with msgs = get_flashed_messages(with_categories=true) %}
+        {% if msgs %}{% for cat,msg in msgs %}
+          <div class="mb-4 px-4 py-3 rounded-xl text-sm font-['Inter']
+            {% if cat=='error' %}bg-red-500/10 border border-red-500/30 text-red-300{% else %}bg-cyan-500/10 border border-cyan-500/30 text-cyan-300{% endif %}">{{ msg }}</div>
+        {% endfor %}{% endif %}
+      {% endwith %}
+
+      <!-- Login Form -->
+      <form method="POST" action="{{ url_for('login') }}" class="space-y-4">
+
+        <!-- Email -->
+        <div>
+          <label class="block text-xs font-['Space_Grotesk'] font-bold text-slate-400 uppercase tracking-wider mb-2">Email or Username</label>
+          <div class="input-wrap">
+            <span class="inp-icon">person</span>
+            <input id="login-email" name="username" type="text" placeholder="you@example.com" required autocomplete="username" class="input-field"/>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-xs font-['Space_Grotesk'] font-bold text-slate-400 uppercase tracking-wider">Password</label>
+            <a href="#" class="text-xs text-cyan-400 hover:text-cyan-300 font-['Inter'] transition-colors">Forgot password?</a>
+          </div>
+          <div class="input-wrap">
+            <span class="inp-icon">lock</span>
+            <input id="login-password" name="password" type="password" placeholder="••••••••" required autocomplete="current-password" class="input-field"/>
+            <button type="button" onclick="togglePwd()" class="eye-btn">
+              <span class="material-symbols-outlined" id="pwd-eye">visibility_off</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Remember me -->
+        <label class="flex items-center gap-3 cursor-pointer select-none">
+          <div class="relative">
+            <input type="checkbox" name="remember" class="sr-only peer"/>
+            <div class="w-9 h-5 bg-surface-container rounded-full border border-white/10 peer-checked:bg-cyan-500/40 peer-checked:border-cyan-500/60 transition-all"></div>
+            <div class="absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-slate-500 peer-checked:bg-cyan-400 peer-checked:translate-x-4 transition-all"></div>
+          </div>
+          <span class="text-sm text-slate-400 font-['Inter']">Keep me signed in</span>
+        </label>
+
+        <!-- Submit -->
+        <button id="login-btn" type="submit" class="w-full py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-['Space_Grotesk'] font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(0,219,233,0.2)] hover:shadow-[0_0_35px_rgba(0,219,233,0.35)] flex items-center justify-center gap-2 text-sm mt-2">
+          <span class="material-symbols-outlined text-lg">login</span>Sign In
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="flex items-center gap-4 my-5">
+        <div class="login-divider flex-1 h-px bg-white/8"></div>
+        <span class="login-text-muted text-slate-600 text-xs font-['Space_Grotesk'] uppercase tracking-widest">or</span>
+        <div class="login-divider flex-1 h-px bg-white/8"></div>
+      </div>
+
+      <!-- Google OAuth -->
+      <a id="google-login-btn" href="{{ url_for('google_login') }}" class="login-google-btn w-full flex items-center justify-center gap-3 py-3.5 rounded-xl border border-white/10 hover:border-white/20 hover:bg-white/5 transition-all font-['Space_Grotesk'] font-bold text-sm text-white group">
+        <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continue with Google
+      </a>
+
+      <!-- Sign up link -->
+      <p class="login-text-muted text-center text-sm text-slate-500 font-['Inter'] mt-6">
+        Don't have an account?
+        <a href="{{ url_for('signup') }}" class="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors ml-1">Create one free →</a>
+      </p>
+
+      <!-- Status indicator -->
+      <div class="login-text-muted flex items-center justify-center gap-2 mt-8">
+        <div class="w-2 h-2 rounded-full bg-green-400" style="animation:pulse-glow 2s ease-in-out infinite"></div>
+        <span class="text-slate-600 text-[10px] font-['Space_Grotesk'] uppercase tracking-widest">System Status: Optimal</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+function togglePwd(){
+  const inp=document.getElementById('login-password');
+  const eye=document.getElementById('pwd-eye');
+  if(inp.type==='password'){inp.type='text';eye.textContent='visibility';}
+  else{inp.type='password';eye.textContent='visibility_off';}
+}
+</script>
+{% endblock %}

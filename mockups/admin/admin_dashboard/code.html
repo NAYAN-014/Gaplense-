@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GapLens Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#ebb2ff",
+                        "on-primary-fixed-variant": "#004f54",
+                        "on-tertiary": "#2f303a",
+                        "secondary-container": "#b600f8",
+                        "tertiary-fixed-dim": "#c6c5d2",
+                        "tertiary-fixed": "#e3e1ef",
+                        "outline-variant": "#3b494b",
+                        "surface-variant": "#323537",
+                        "on-secondary": "#520072",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#d9d8e6",
+                        "background": "#101415",
+                        "on-secondary-fixed-variant": "#74009f",
+                        "inverse-on-surface": "#2d3133",
+                        "on-surface-variant": "#b9cacb",
+                        "on-tertiary-fixed-variant": "#454651",
+                        "on-primary-container": "#006970",
+                        "surface-container-lowest": "#0b0f10",
+                        "on-tertiary-container": "#5e5e69",
+                        "surface-tint": "#00dbe9",
+                        "primary-container": "#00f0ff",
+                        "surface-container-highest": "#323537",
+                        "surface-container-high": "#272a2c",
+                        "surface-bright": "#363a3b",
+                        "on-surface": "#e0e3e5",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#00dbe9",
+                        "surface-dim": "#101415",
+                        "secondary-fixed-dim": "#ebb2ff",
+                        "on-secondary-container": "#fff6fc",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#320047",
+                        "on-primary-fixed": "#002022",
+                        "surface-container": "#1d2022",
+                        "tertiary": "#f7f4ff",
+                        "primary": "#dbfcff",
+                        "outline": "#849495",
+                        "surface-container-low": "#191c1e",
+                        "primary-fixed": "#7df4ff",
+                        "on-tertiary-fixed": "#1a1b24",
+                        "surface": "#101415",
+                        "secondary-fixed": "#f8d8ff",
+                        "inverse-primary": "#006970",
+                        "on-background": "#e0e3e5",
+                        "inverse-surface": "#e0e3e5",
+                        "on-primary": "#00363a",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "bento-padding": "2rem",
+                        "unit-md": "1rem",
+                        "grid-gap": "1.5rem",
+                        "unit-xs": "0.25rem",
+                        "unit-sm": "0.5rem",
+                        "unit-lg": "2rem",
+                        "container-padding": "2rem"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "label-caps": ["Space Grotesk"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #101415;
+            color: #e0e3e5;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .glass-panel-elevated {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 1.5rem;
+        }
+        .cyan-glow {
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
+        .purple-glow {
+            box-shadow: 0 0 20px rgba(182, 0, 248, 0.15);
+        }
+        .skill-chip {
+            background: rgba(182, 0, 248, 0.1);
+            color: #ebb2ff;
+            border: 1px solid rgba(182, 0, 248, 0.2);
+        }
+        .orb-gradient {
+            background: linear-gradient(135deg, #00f0ff 0%, #006970 100%);
+        }
+    </style>
+</head>
+<body class="antialiased">
+<!-- Top Navigation Shell -->
+<header class="bg-slate-950/60 backdrop-blur-2xl text-cyan-400 font-['Space_Grotesk'] text-sm tracking-tight docked full-width top-0 border-b border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] flex justify-between items-center w-full h-16 px-6 z-50 fixed">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold tracking-tighter text-cyan-400">GapLens Admin</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined text-slate-400 hover:text-cyan-300 transition-all duration-300 cursor-pointer p-2 rounded-full hover:bg-white/5" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary-container rounded-full ring-2 ring-slate-950"></span>
+</div>
+<span class="material-symbols-outlined text-slate-400 hover:text-cyan-300 transition-all duration-300 cursor-pointer p-2 rounded-full hover:bg-white/5" data-icon="settings">settings</span>
+<div class="w-8 h-8 rounded-full border border-white/20 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up of professional admin avatar in high-tech setting with soft blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAS3GO62KSPSalanDWclWz76kITMqx3-voelpUYSAmqRoJsqGf7k79eLsyfy01KtiHIjzn_eQICPUETTj9EO_tzb4mW9bDuHoVkBK88d6JCug6yenv4gMgH4RPhszn7Tzs4jNvPstXpJH2oQhkPw19cjwKjhh53Mc86ZqZoEYmK5JkrCwuK9dDjlLKE-yzHAvVCCE8N8tkzMj5ZPBAKWjnBZ_o82IiSPomLqQUisiJN95T6DWVZLrD1lLGnm5OARi9C3NbQShL2--xY"/>
+</div>
+</div>
+</header>
+<!-- Side Navigation Shell -->
+<aside class="bg-slate-950/40 backdrop-blur-xl font-['Space_Grotesk'] text-sm font-medium h-screen w-64 border-r border-white/10 fixed left-0 top-0 flex flex-col h-full z-40">
+<div class="p-6 pt-20">
+<div class="flex items-center gap-3 mb-10">
+<div class="w-10 h-10 rounded-xl orb-gradient flex items-center justify-center cyan-glow">
+<span class="material-symbols-outlined text-white" data-icon="quiz">quiz</span>
+</div>
+<div>
+<h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">GapLens</h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-500">Mastery Diagnostic</p>
+</div>
+</div>
+<nav class="space-y-2 flex flex-col divide-y divide-white/5">
+<div class="space-y-1 pb-4">
+<!-- Tab: System Analytics (Active by default for Dashboard) -->
+<a class="bg-cyan-500/10 text-cyan-400 border-l-4 border-cyan-400 px-4 py-3 flex items-center gap-3 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>System Analytics</span>
+</a>
+<a class="text-slate-400 px-4 py-3 hover:bg-white/5 flex items-center gap-3 hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span>Question Lab</span>
+</a>
+<a class="text-slate-400 px-4 py-3 hover:bg-white/5 flex items-center gap-3 hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>User Oversight</span>
+</a>
+</div>
+<div class="pt-4 space-y-1">
+<button class="w-full bg-cyan-400 text-on-primary-fixed font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 cyan-glow hover:bg-cyan-300 transition-all duration-300 active:scale-95">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span>New Diagnostic</span>
+</button>
+</div>
+</nav>
+</div>
+<div class="mt-auto p-6 space-y-1 border-t border-white/5">
+<a class="text-slate-400 px-4 py-2 hover:bg-white/5 flex items-center gap-3 text-xs hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="menu_book">menu_book</span>
+<span>Documentation</span>
+</a>
+<a class="text-slate-400 px-4 py-2 hover:bg-white/5 flex items-center gap-3 text-xs hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help_outline">help_outline</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 pt-24 p-bento-padding min-h-screen">
+<div class="max-w-[1440px] mx-auto">
+<header class="mb-grid-gap">
+<h2 class="font-headline-md text-headline-md text-on-background">Diagnostic Overview</h2>
+<p class="font-body-md text-body-md text-slate-400">Monitoring real-time cognitive growth and platform vitality.</p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-grid-gap">
+<!-- Section 1: Platform Overview Stats (2x2 span) -->
+<div class="col-span-12 lg:col-span-6 grid grid-cols-2 gap-unit-md">
+<div class="glass-panel p-unit-lg flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-cyan-400 block mb-unit-sm">TOTAL USERS</span>
+<div class="font-headline-md text-headline-md text-on-background">12,842</div>
+</div>
+<div class="flex items-center gap-2 text-primary-fixed-dim text-xs mt-unit-sm">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span>+14% from last month</span>
+</div>
+</div>
+<div class="glass-panel p-unit-lg flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-secondary block mb-unit-sm">TESTS TAKEN</span>
+<div class="font-headline-md text-headline-md text-on-background">48,901</div>
+</div>
+<div class="flex items-center gap-2 text-slate-400 text-xs mt-unit-sm">
+<span class="material-symbols-outlined text-sm" data-icon="history">history</span>
+<span>Average 2.4 tests/user</span>
+</div>
+</div>
+<div class="glass-panel p-unit-lg col-span-2 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 rounded-full glass-panel-elevated flex items-center justify-center border-cyan-400/30">
+<span class="material-symbols-outlined text-cyan-400 text-3xl" data-icon="science">science</span>
+</div>
+<div>
+<span class="font-label-caps text-label-caps text-slate-400">ACTIVE QUESTIONS</span>
+<div class="font-headline-sm text-headline-sm text-on-background">1,204 Modules</div>
+</div>
+</div>
+<div class="text-right">
+<div class="h-2 w-32 bg-white/5 rounded-full overflow-hidden mb-2">
+<div class="h-full bg-cyan-400 w-3/4 shadow-[0_0_8px_#00f0ff]"></div>
+</div>
+<span class="text-[10px] text-slate-500 uppercase tracking-widest">Growth Velocity: High</span>
+</div>
+</div>
+</div>
+<!-- Section 4: System Health (2x1 span) -->
+<div class="col-span-12 lg:col-span-6 glass-panel p-unit-lg flex flex-col">
+<div class="flex justify-between items-center mb-unit-lg">
+<h3 class="font-headline-sm text-headline-sm text-on-background">System Health</h3>
+<span class="skill-chip px-3 py-1 rounded-full text-[10px] uppercase font-bold">Stable</span>
+</div>
+<div class="flex-grow flex flex-col justify-center gap-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-cyan-400" data-icon="memory">memory</span>
+<span class="text-body-md">Server Uptime</span>
+</div>
+<div class="text-cyan-400 font-mono font-bold">99.998%</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="database">database</span>
+<span class="text-body-md">DB Latency</span>
+</div>
+<div class="text-secondary font-mono font-bold">24ms</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400" data-icon="speed">speed</span>
+<span class="text-body-md">API Throughput</span>
+</div>
+<div class="text-slate-200 font-mono font-bold">12k req/s</div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-white/5 flex gap-2 overflow-hidden">
+<!-- Simulated Load Bars -->
+<div class="flex-grow h-1 rounded-full bg-cyan-400/20"><div class="w-3/4 h-full bg-cyan-400"></div></div>
+<div class="flex-grow h-1 rounded-full bg-cyan-400/20"><div class="w-1/2 h-full bg-cyan-400"></div></div>
+<div class="flex-grow h-1 rounded-full bg-cyan-400/20"><div class="w-5/6 h-full bg-cyan-400"></div></div>
+</div>
+</div>
+<!-- Section 2: Question Lab Preview (3x2 span equivalent) -->
+<div class="col-span-12 lg:col-span-8 glass-panel p-unit-lg">
+<div class="flex justify-between items-center mb-unit-lg">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-background">Question Lab</h3>
+<p class="text-slate-400 text-sm">Recent additions to the mastery pool.</p>
+</div>
+<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs hover:bg-white/10 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add_circle">add_circle</span>
+                            Add New Question
+                        </button>
+</div>
+<div class="space-y-unit-sm">
+<!-- Question Item -->
+<div class="p-4 rounded-xl border border-white/5 bg-white/5 hover:bg-white/[0.07] transition-all group flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center font-mono text-cyan-400 border-cyan-400/20">#342</div>
+<div>
+<div class="font-body-md text-on-surface">Neural Pathway Complexity in LLMs</div>
+<div class="flex gap-2 mt-1">
+<span class="skill-chip px-2 py-0.5 rounded text-[10px] font-medium">Data Science</span>
+<span class="text-slate-500 text-[10px] uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]" data-icon="timer">timer</span> 4m exp.
+                                        </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-slate-400 hover:text-cyan-400 transition-colors"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="p-2 text-slate-400 hover:text-error transition-colors"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</div>
+</div>
+<div class="p-4 rounded-xl border border-white/5 bg-white/5 hover:bg-white/[0.07] transition-all group flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center font-mono text-cyan-400 border-cyan-400/20">#341</div>
+<div>
+<div class="font-body-md text-on-surface">Algorithmic Efficiency: Big O Analysis</div>
+<div class="flex gap-2 mt-1">
+<span class="skill-chip px-2 py-0.5 rounded text-[10px] font-medium">Computer Science</span>
+<span class="text-slate-500 text-[10px] uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]" data-icon="timer">timer</span> 2m exp.
+                                        </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-slate-400 hover:text-cyan-400 transition-colors"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="p-2 text-slate-400 hover:text-error transition-colors"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</div>
+</div>
+<div class="p-4 rounded-xl border border-white/5 bg-white/5 hover:bg-white/[0.07] transition-all group flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center font-mono text-cyan-400 border-cyan-400/20">#340</div>
+<div>
+<div class="font-body-md text-on-surface">Statistical Variance in Stochastic Models</div>
+<div class="flex gap-2 mt-1">
+<span class="skill-chip px-2 py-0.5 rounded text-[10px] font-medium">Mathematics</span>
+<span class="text-slate-500 text-[10px] uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]" data-icon="timer">timer</span> 8m exp.
+                                        </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-slate-400 hover:text-cyan-400 transition-colors"><span class="material-symbols-outlined" data-icon="edit">edit</span></button>
+<button class="p-2 text-slate-400 hover:text-error transition-colors"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: User Activity Feed (1x2 span equivalent) -->
+<div class="col-span-12 lg:col-span-4 glass-panel p-unit-lg">
+<h3 class="font-headline-sm text-headline-sm text-on-background mb-unit-lg">User Activity</h3>
+<div class="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[1px] before:bg-white/10">
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-cyan-400/20 border border-cyan-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-cyan-400" data-icon="person_add">person_add</span>
+</div>
+<div class="text-xs text-slate-500 mb-1">2 minutes ago</div>
+<div class="text-sm font-body-md text-on-surface">
+<span class="text-white font-bold">Julian V.</span> joined the platform
+                            </div>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-secondary/20 border border-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-secondary" data-icon="task_alt">task_alt</span>
+</div>
+<div class="text-xs text-slate-500 mb-1">15 minutes ago</div>
+<div class="text-sm font-body-md text-on-surface">
+<span class="text-white font-bold">Sarah K.</span> completed <span class="text-cyan-400 italic">Advanced Logic Diagnostics</span>
+</div>
+<div class="mt-2 flex gap-2">
+<span class="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded">Score: 94%</span>
+</div>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-fixed-dim/20 border border-primary-fixed-dim flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-primary-fixed-dim" data-icon="military_tech">military_tech</span>
+</div>
+<div class="text-xs text-slate-500 mb-1">42 minutes ago</div>
+<div class="text-sm font-body-md text-on-surface">
+<span class="text-white font-bold">Marcus T.</span> achieved <span class="text-secondary italic">Mastery Level 4</span>
+</div>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-slate-400" data-icon="person_add">person_add</span>
+</div>
+<div class="text-xs text-slate-500 mb-1">1 hour ago</div>
+<div class="text-sm font-body-md text-on-surface">
+<span class="text-white font-bold">Elena R.</span> joined the platform
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button Contextual Check (Only on Home/Main) -->
+<button class="fixed bottom-10 right-10 w-16 h-16 rounded-full bg-cyan-400 text-on-primary-fixed shadow-[0_0_30px_rgba(0,240,255,0.4)] flex items-center justify-center group hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-3xl font-bold" data-icon="rocket_launch">rocket_launch</span>
+</button>
+</body></html>

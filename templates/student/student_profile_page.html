@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block extra_styles %}.skill-chip{background:rgba(182,0,248,0.1);color:#ebb2ff}{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto pb-20">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+<section class="md:col-span-8 glass-card rounded-xl p-8 flex flex-col md:flex-row items-center gap-8 border-l-4 border-l-primary-container">
+  <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-4xl font-bold text-white font-['Space_Grotesk']">{{ session.get('name','S')[0].upper() }}</div>
+  <div class="flex-1 text-center md:text-left">
+    <h1 class="text-3xl font-bold text-white font-['Space_Grotesk'] mb-1">{{ user.name if user else session.get('name','Student') }}</h1>
+    <p class="text-on-surface-variant text-sm mb-3">{{ user.college if user and user.college else 'GapLens Platform' }} · Student</p>
+    <div class="flex flex-wrap justify-center md:justify-start gap-2">
+      {% if results %}<div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-high rounded-full border border-white/5"><span class="material-symbols-outlined text-primary-container text-sm">verified</span><span class="text-xs font-['Space_Grotesk']">{{ results|length }} Assessed</span></div>{% endif %}
+      {% if user and user.get('linkedin') %}<a href="{{ user.linkedin }}" target="_blank" class="px-3 py-1.5 bg-blue-600/20 rounded-full border border-blue-500/30 text-blue-400 text-xs font-['Space_Grotesk']">LinkedIn ↗</a>{% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="md:col-span-4 glass-card rounded-xl p-8 flex flex-col justify-between border-b-4 border-b-secondary-container">
+  <div><h3 class="font-['Space_Grotesk'] text-secondary text-lg mb-2 flex items-center gap-2"><span class="material-symbols-outlined">auto_awesome</span>Smart Resume</h3>
+  <p class="text-on-surface-variant text-sm mb-4">Auto-generated PDF from your verified diagnostic scores.</p></div>
+  <form method="POST" action="{{ url_for('generate_resume') }}">
+    <button type="submit" class="w-full bg-gradient-to-r from-cyan-400 to-blue-500 hover:brightness-110 text-on-primary font-['Space_Grotesk'] font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all glow-cyan"><span class="material-symbols-outlined">download</span>Generate & Email PDF</button>
+  </form>
+</section>
+
+<section class="md:col-span-5 glass-card rounded-xl p-8">
+  <h3 class="font-['Space_Grotesk'] text-lg text-primary mb-5 flex items-center gap-2"><span class="material-symbols-outlined">psychology</span>Verified Skills</h3>
+  <div class="flex flex-wrap gap-2">
+    {% if results %}{% for r in results %}
+      <div class="skill-chip px-3 py-1 rounded text-sm font-medium border border-secondary/20 flex items-center gap-2">{{ r.skill }}<span class="text-[10px] bg-secondary/20 px-1 rounded">{{ r.score|round|int }}%</span></div>
+    {% endfor %}{% else %}<p class="text-slate-500 text-sm">No assessments yet. <a href="{{ url_for('test_selection') }}" class="text-cyan-400 hover:underline">Start now →</a></p>{% endif %}
+  </div>
+  <div class="mt-5 pt-4 border-t border-white/5">
+    <a href="{{ url_for('edit_profile') }}" class="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-cyan-500/30 text-cyan-400 text-sm font-['Space_Grotesk'] hover:bg-cyan-500/10 transition-all"><span class="material-symbols-outlined">manage_accounts</span>Edit Profile</a>
+  </div>
+</section>
+
+<section class="md:col-span-7 glass-card rounded-xl p-8 relative overflow-hidden">
+  <div class="absolute top-0 right-0 p-8 opacity-10"><span class="material-symbols-outlined text-8xl">school</span></div>
+  <h3 class="font-['Space_Grotesk'] text-lg text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">info</span>About</h3>
+  <p class="text-on-surface-variant text-sm">{{ user.bio if user and user.bio else 'No bio set. Click Edit Profile to add one.' }}</p>
+</section>
+
+<section class="md:col-span-12 glass-card rounded-xl overflow-hidden border-t-4 border-t-primary-container">
+  <div class="p-8 pb-4"><h3 class="font-['Space_Grotesk'] text-lg text-primary flex items-center gap-2"><span class="material-symbols-outlined">verified</span>Assessment History</h3></div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+      <thead><tr class="bg-surface-container-high/50 text-[10px] text-zinc-500 uppercase font-['Space_Grotesk'] border-y border-white/5">
+        <th class="px-8 py-4">Skill</th><th class="px-8 py-4">Score</th><th class="px-8 py-4">Status</th><th class="px-8 py-4 text-right">Action</th>
+      </tr></thead>
+      <tbody class="text-sm">
+        {% if results %}{% for r in results %}
+        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+          <td class="px-8 py-5 font-semibold text-white">{{ r.skill }}</td>
+          <td class="px-8 py-5"><div class="flex items-center gap-2"><div class="w-20 bg-surface-container rounded-full h-1.5 overflow-hidden"><div class="bg-cyan-400 h-full" style="width:{{ r.score|round|int }}%"></div></div><span class="text-cyan-400">{{ r.score|round|int }}%</span></div></td>
+          <td class="px-8 py-5">{% if not r.gap_identified %}<span class="px-3 py-1 bg-primary-container/10 text-primary-container text-[10px] font-bold rounded uppercase">Mastered</span>{% else %}<span class="px-3 py-1 bg-error-container/20 text-error text-[10px] font-bold rounded uppercase">Gap Found</span>{% endif %}</td>
+          <td class="px-8 py-5 text-right"><a href="{{ url_for('results_recommendations', skill=r.skill) }}" class="text-cyan-400 text-xs hover:underline">View →</a></td>
+        </tr>
+        {% endfor %}{% else %}
+        <tr><td colspan="4" class="px-8 py-10 text-center text-slate-500">No tests yet. <a href="{{ url_for('test_selection') }}" class="text-cyan-400 hover:underline">Start now →</a></td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</section>
+</div></div>
+{% endblock %}

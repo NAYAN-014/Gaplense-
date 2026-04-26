@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% block title %}Admin Panel{% endblock %}
+{% block extra_styles %}
+.tab-btn{padding:0.5rem 1.25rem;border-radius:0.5rem;font-size:0.78rem;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:0.05em;border:1px solid rgba(255,255,255,0.08);color:#94a3b8;cursor:pointer;transition:all 0.2s;background:transparent}
+.tab-btn.active{background:rgba(0,240,255,0.1);border-color:rgba(0,240,255,0.3);color:#22d3ee}
+.tab-panel{display:none}.tab-panel.active{display:block}
+{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto pb-20">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-white font-['Space_Grotesk']">Admin Panel</h1>
+      <p class="text-slate-400 text-sm mt-1">Real-time platform overview and full management control</p>
+    </div>
+    <span class="px-4 py-2 bg-purple-500/20 border border-purple-500/40 text-purple-400 text-sm font-['Space_Grotesk'] font-bold rounded-xl">Admin Access</span>
+  </div>
+
+  <!-- Real Stats -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    {% for label,val,icon,color in [
+      ('Total Users', total_users, 'group', 'text-cyan-400'),
+      ('Tests Taken', total_tests, 'quiz', 'text-green-400'),
+      ('Avg Score', avg_score|string+'%', 'analytics', 'text-purple-400'),
+      ('Questions', total_questions, 'library_books', 'text-yellow-400')] %}
+    <div class="glass-card rounded-2xl p-6 text-center">
+      <span class="material-symbols-outlined text-2xl {{ color }} mb-2 block">{{ icon }}</span>
+      <div class="text-2xl font-bold {{ color }} font-['Space_Grotesk']">{{ val }}</div>
+      <div class="text-slate-500 text-xs mt-1 font-['Space_Grotesk'] uppercase tracking-wide">{{ label }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    {% for label,val,icon,color in [
+      ('Students', total_students, 'school', 'text-cyan-400'),
+      ('Recruiters', total_recruiters, 'business_center', 'text-orange-400'),
+      ('Jobs Posted', total_jobs, 'work', 'text-green-400'),
+      ('Community Posts', total_posts, 'forum', 'text-pink-400')] %}
+    <div class="glass-card rounded-2xl p-4 text-center">
+      <span class="material-symbols-outlined text-xl {{ color }} mb-1 block">{{ icon }}</span>
+      <div class="text-xl font-bold {{ color }} font-['Space_Grotesk']">{{ val }}</div>
+      <div class="text-slate-500 text-[10px] mt-0.5 font-['Space_Grotesk'] uppercase tracking-wide">{{ label }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex gap-2 mb-6 flex-wrap">
+    <button class="tab-btn active" onclick="showTab('activity')">Recent Activity</button>
+    <button class="tab-btn" onclick="showTab('users')">User Management</button>
+    <button class="tab-btn" id="questions-tab-btn" onclick="showTab('questions')">Question Bank</button>
+    <button class="tab-btn" onclick="showTab('skills')">Skill Stats</button>
+    <button class="tab-btn" id="community-tab-btn" onclick="showTab('community')">Community</button>
+  </div>
+
+  <!-- Tab: Recent Activity -->
+  <div id="tab-activity" class="tab-panel active">
+    <div class="glass-card rounded-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-white/5">
+        <h2 class="font-['Space_Grotesk'] font-bold text-white flex items-center gap-2"><span class="material-symbols-outlined text-cyan-400">history</span>Recent Test Results</h2>
+      </div>
+      {% if recent_results %}
+      <div class="divide-y divide-white/5">
+        {% for r in recent_results %}
+        <div class="flex items-center gap-4 px-6 py-4 hover:bg-white/5 transition-colors">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold font-['Space_Grotesk'] text-sm flex-shrink-0">{{ r.user_name[0].upper() if r.user_name else '?' }}</div>
+          <div class="flex-1">
+            <span class="text-white text-sm font-medium">{{ r.user_name }}</span>
+            <span class="text-slate-500 text-sm"> took </span>
+            <span class="text-cyan-400 text-sm font-medium">{{ r.skill }}</span>
+          </div>
+          <span class="font-bold text-sm {% if r.score >= 80 %}text-green-400{% elif r.score >= 60 %}text-yellow-400{% else %}text-red-400{% endif %}">{{ r.score|round|int }}%</span>
+          <span class="text-[10px] px-2 py-1 rounded-full {% if not r.get('gap_identified') %}bg-green-500/10 text-green-400{% else %}bg-red-500/10 text-red-400{% endif %}">{% if not r.get('gap_identified') %}Passed{% else %}Gap Found{% endif %}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="p-12 text-center text-slate-400">No test results yet.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Tab: User Management -->
+  <div id="tab-users" class="tab-panel">
+    <div class="glass-card rounded-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-white/5 flex items-center justify-between">
+        <h2 class="font-['Space_Grotesk'] font-bold text-white flex items-center gap-2"><span class="material-symbols-outlined text-cyan-400">manage_accounts</span>All Users ({{ total_users }})</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead><tr class="bg-surface-container-high/50 text-[10px] text-slate-500 uppercase font-['Space_Grotesk'] border-b border-white/5">
+            <th class="px-6 py-3">Name</th><th class="px-6 py-3">Email</th><th class="px-6 py-3">Role</th><th class="px-6 py-3 text-right">Action</th>
+          </tr></thead>
+          <tbody>
+            {% for u in all_users %}
+            <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs">{{ u.name[0].upper() if u.name else '?' }}</div>
+                  <span class="text-white font-medium">{{ u.name }}</span>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-slate-400">{{ u.email }}</td>
+              <td class="px-6 py-4">
+                <span class="px-2 py-1 rounded-full text-[10px] font-bold
+                  {% if u.role=='admin' %}bg-purple-500/15 text-purple-400
+                  {% elif u.role=='recruiter' %}bg-orange-500/15 text-orange-400
+                  {% else %}bg-cyan-500/15 text-cyan-400{% endif %}">{{ u.role|capitalize }}</span>
+              </td>
+              <td class="px-6 py-4 text-right">
+                {% if u.role != 'admin' %}
+                <form method="POST" action="{{ url_for('admin_delete_user', user_id=u._id) }}" onsubmit="return confirm('Delete {{ u.name }}?')">
+                  <button type="submit" class="text-red-400 text-xs hover:text-red-300 transition-colors flex items-center gap-1 ml-auto">
+                    <span class="material-symbols-outlined text-sm">delete</span>Delete
+                  </button>
+                </form>
+                {% else %}
+                <span class="text-slate-600 text-xs">Protected</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab: Question Bank -->
+  <div id="tab-questions" class="tab-panel">
+    <!-- Add Question Form -->
+    <div class="glass-card rounded-2xl p-6 mb-5 border border-cyan-500/20">
+      <h2 class="font-['Space_Grotesk'] font-bold text-white mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-400">add_circle</span>Add New Question</h2>
+      <form method="POST" action="{{ url_for('admin_add_question') }}" class="space-y-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-['Space_Grotesk'] font-bold text-slate-500 uppercase tracking-wider mb-1">Skill *</label>
+            <input name="skill" placeholder="Python / Java / C++ …" required class="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-white text-sm outline-none focus:border-cyan-500/50"/>
+          </div>
+          <div>
+            <label class="block text-[10px] font-['Space_Grotesk'] font-bold text-slate-500 uppercase tracking-wider mb-1">Question *</label>
+            <input name="question" placeholder="What is the output of…?" required class="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-white text-sm outline-none focus:border-cyan-500/50"/>
+          </div>
+          {% for i in range(1,5) %}
+          <div>
+            <label class="block text-[10px] font-['Space_Grotesk'] font-bold text-slate-500 uppercase tracking-wider mb-1">Option {{ i }}</label>
+            <input name="opt{{ i }}" placeholder="Option {{ i }}" class="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-white text-sm outline-none focus:border-cyan-500/50"/>
+          </div>
+          {% endfor %}
+          <div>
+            <label class="block text-[10px] font-['Space_Grotesk'] font-bold text-slate-500 uppercase tracking-wider mb-1">Correct Answer *</label>
+            <input name="answer" placeholder="Must match one of the options exactly" required class="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-white text-sm outline-none focus:border-cyan-500/50"/>
+          </div>
+        </div>
+        <button type="submit" class="flex items-center gap-2 px-5 py-2.5 bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-['Space_Grotesk'] font-bold text-sm rounded-xl hover:bg-cyan-500/30 transition-all">
+          <span class="material-symbols-outlined text-base">add</span>Add Question
+        </button>
+      </form>
+    </div>
+    <!-- Questions List -->
+    <div class="glass-card rounded-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-white/5">
+        <h2 class="font-['Space_Grotesk'] font-bold text-white flex items-center gap-2"><span class="material-symbols-outlined text-cyan-400">quiz</span>Questions ({{ total_questions }} total, showing latest 30)</h2>
+      </div>
+      <div class="divide-y divide-white/5 max-h-[500px] overflow-y-auto">
+        {% for q in all_questions %}
+        <div class="flex items-start gap-4 px-6 py-4 hover:bg-white/5 transition-colors">
+          <span class="px-2 py-0.5 bg-cyan-500/10 text-cyan-400 text-[10px] font-bold rounded flex-shrink-0 mt-0.5">{{ q.skill }}</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-white text-sm truncate">{{ q.question }}</p>
+            <p class="text-green-400 text-xs mt-0.5">✓ {{ q.answer }}</p>
+          </div>
+          <form method="POST" action="{{ url_for('admin_delete_question', q_id=q._id) }}" onsubmit="return confirm('Delete this question?')">
+            <button type="submit" class="text-red-400 hover:text-red-300 transition-colors flex-shrink-0"><span class="material-symbols-outlined text-base">delete</span></button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab: Skill Stats -->
+  <div id="tab-skills" class="tab-panel">
+    <div class="glass-card rounded-2xl p-6">
+      <h2 class="font-['Space_Grotesk'] font-bold text-white mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-cyan-400">trending_up</span>Skill Performance Stats</h2>
+      {% if skill_stats %}
+      <div class="space-y-4">
+        {% for s in skill_stats %}
+        <div class="flex items-center gap-4">
+          <span class="text-white text-sm font-medium w-32 flex-shrink-0">{{ s._id }}</span>
+          <div class="flex-1 h-3 bg-surface-container rounded-full overflow-hidden">
+            <div class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-purple-500" style="width:{{ s.avg|round|int }}%"></div>
+          </div>
+          <span class="text-cyan-400 font-bold text-sm w-12 text-right">{{ s.avg|round|int }}%</span>
+          <span class="text-slate-500 text-xs w-20 text-right">{{ s.count }} attempts</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-slate-400 text-center py-8">No assessment data yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Tab: Community Moderation -->
+  <div id="tab-community" class="tab-panel">
+    <div class="glass-card rounded-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-white/5">
+        <h2 class="font-['Space_Grotesk'] font-bold text-white flex items-center gap-2"><span class="material-symbols-outlined text-cyan-400">shield</span>Community Moderation ({{ total_posts }} posts)</h2>
+      </div>
+      {% if all_posts %}
+      <div class="divide-y divide-white/5 max-h-[600px] overflow-y-auto">
+        {% for post in all_posts %}
+        <div class="px-6 py-4 hover:bg-white/5 transition-colors">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs">{{ post.author[0].upper() if post.author else '?' }}</div>
+              <div>
+                <span class="text-white text-xs font-medium font-['Space_Grotesk']">{{ post.author }}</span>
+                <span class="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-slate-500">{{ post.get('role','student') }}</span>
+              </div>
+            </div>
+            <form method="POST" action="{{ url_for('admin_delete_post', post_id=post._id) }}" onsubmit="return confirm('Remove this post?')">
+              <button type="submit" class="flex items-center gap-1 text-red-400 text-xs hover:text-red-300 transition-colors px-3 py-1 border border-red-500/20 rounded-lg hover:bg-red-500/10">
+                <span class="material-symbols-outlined text-sm">block</span>Remove
+              </button>
+            </form>
+          </div>
+          <p class="text-slate-300 text-sm mt-2 font-['Inter']">{{ post.content }}</p>
+          {% if post.get('comments') %}
+          <p class="text-slate-600 text-xs mt-1">{{ post.comments|length }} comment(s)</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="p-12 text-center text-slate-400">No community posts yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block extra_scripts %}
+<script>
+function showTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.target.classList.add('active');
+}
+// Handle hash navigation
+const hash = window.location.hash.replace('#','');
+if(hash) showTabByName(hash);
+function showTabByName(name){
+  const btn = document.querySelector('[onclick="showTab(\''+name+'\')"]');
+  if(btn){btn.click();}
+}
+</script>
+{% endblock %}
