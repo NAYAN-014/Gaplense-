@@ -72,7 +72,7 @@ The platform uses **objective, test-based verification** instead of self-reporte
 
 ```
 ┌─────────────────┐     HTTP      ┌──────────────────┐     ┌─────────────────┐
-│   Web Browser   │ ◄──────────► │  Flask Server    │ ◄──►│   MongoDB       │
+│   Web Browser   │ ◄──────────►  │  Flask Server    │ ◄──►│   MongoDB       │
 │  (Student/      │   GET/POST    │  (Python 3)      │     │  + GridFS       │
 │  Recruiter/     │               │                  │     │                 │
 │  Admin)         │               │  • Routes        │     │  • users        │
