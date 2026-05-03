@@ -8,7 +8,7 @@ Routes: dashboard, profile, jobs, community, learning, insights, skill-map,
 
 from flask import render_template, request, redirect, url_for, session, flash, jsonify
 from bson.objectid import ObjectId
-from utils import fetch_youtube_videos
+from core.utils import fetch_youtube_videos
 
 
 def register_student(app, users_col, results_col, db, fs):

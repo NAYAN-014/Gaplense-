@@ -9,7 +9,7 @@ from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from io import BytesIO
-from utils import generate_and_email_pdf
+from core.utils import generate_and_email_pdf
 
 ALLOWED_RESUME_EXTENSIONS = {'pdf', 'doc', 'docx'}
 MAX_RESUME_SIZE           = 5 * 1024 * 1024  # 5 MB

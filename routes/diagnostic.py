@@ -6,7 +6,7 @@ Routes: /diagnostic/<skill>, /diagnostic/submit
 
 from flask import render_template, request, redirect, url_for, session, jsonify
 from bson.objectid import ObjectId
-from utils import evaluate_score, get_gemini_skill_insights
+from core.utils import evaluate_score, get_gemini_skill_insights
 
 
 def register_diagnostic(app, users_col, results_col, questions_col, db):

@@ -6,6 +6,7 @@
 <meta name="description" content="{% block meta_desc %}GapLens: Skill Diagnostic & Employment Platform{% endblock %}"/>
 <script>if(localStorage.getItem('gl-theme')==='light')document.getElementById('gl-root').classList.remove('dark')</script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script id="tw-cfg">
@@ -268,7 +269,7 @@ html:not(.dark) .font-medium {
 <!-- ═══ SIDEBAR ═══ -->
 <nav id="gl-sidebar" class="fixed left-0 top-0 h-full w-64 flex flex-col p-4 bg-slate-950/50 backdrop-blur-xl border-r border-white/10 z-50 hidden md:flex overflow-y-auto">
   <div class="mb-6 px-2 flex flex-col items-center text-center">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="GapLens" class="h-20 w-auto mb-2"/>
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="GapLens" class="h-20 w-auto mb-2"/>
     <p class="text-slate-500 text-[11px] font-['Space_Grotesk']">Hi, {{ session.get('name','User') }} 👋</p>
   </div>
 
