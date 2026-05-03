@@ -42,7 +42,10 @@ db, users_col, results_col, questions_col, fs = init_db(app.config['MONGO_URI'])
 oauth, google = init_oauth(app)
 
 # ── Seed Default Admin ────────────────────────────────────────────────────────
-seed_default_admin(users_col, app.config)
+try:
+    seed_default_admin(users_col, app.config)
+except Exception as e:
+    print(f"[SEED WARNING] Could not seed admin: {e}")
 
 # ── Register All Routes ───────────────────────────────────────────────────────
 register_auth(app, users_col, google)

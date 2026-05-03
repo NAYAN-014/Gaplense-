@@ -16,15 +16,20 @@ def init_db(mongo_uri: str):
     MongoDB client aur sabhi collections initialize karo.
     Returns: (db, users_col, results_col, questions_col, fs)
     """
+    # Atlas (mongodb+srv) needs SSL certs, localhost does not
+    if 'mongodb+srv' in mongo_uri or 'mongodb.net' in mongo_uri:
+        kwargs = {'serverSelectionTimeoutMS': 5000, 'tls': True, 'tlsCAFile': certifi.where()}
+    else:
+        kwargs = {'serverSelectionTimeoutMS': 5000}
+
     try:
-        client        = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000, tls=True, tlsCAFile=certifi.where())
-        # Test connection
+        client = MongoClient(mongo_uri, **kwargs)
         client.server_info()
         print("[DB] MongoDB connected successfully!")
     except Exception as e:
         print(f"[DB WARNING] MongoDB connection failed: {e}")
-        print("[DB WARNING] App will start but database features won't work.")
-        client = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000, tls=True, tlsCAFile=certifi.where())
+        print("[DB WARNING] App will start but database features may not work.")
+        client = MongoClient(mongo_uri, **kwargs)
     db            = client['gaplens']
     users_col     = db['users']
     results_col   = db['test_results']
