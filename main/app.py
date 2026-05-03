@@ -1,17 +1,25 @@
 """
-app.py — GapLens Platform Entry Point
-=======================================
-Sirf app create karta hai, config load karta hai, aur sab routes register karta hai.
-Kisi bhi route ke liye → routes/ folder dekho.
-Kisi bhi setting ke liye → config.py dekho.
+main/app.py — GapLens Flask Application Factory
+=================================================
+Yahan Flask app banta hai. Routes register hote hain.
+Run karne ke liye project root se: python run.py
 """
 
+import os
+import sys
+
+# ── Project root path (main/ ka parent) ──────────────────────────────────────
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Python path mein project root add karo (routes/, core/, other/ sab milenge)
+sys.path.insert(0, ROOT)
+
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(os.path.join(ROOT, '.env'))
 
 from flask import Flask
-from config import Config
-from extensions import init_db, init_oauth, seed_default_admin
+from other.config     import Config
+from other.extensions import init_db, init_oauth, seed_default_admin
 
 # ── Routes (har role ka alag file) ───────────────────────────────────────────
 from routes.auth       import register_auth
@@ -21,9 +29,12 @@ from routes.admin      import register_admin
 from routes.diagnostic import register_diagnostic
 from routes.resume     import register_resume
 
-
-# ── App Factory ───────────────────────────────────────────────────────────────
-app = Flask(__name__)
+# ── Flask App — template & static folders explicitly set to project root ─────
+app = Flask(
+    __name__,
+    template_folder=os.path.join(ROOT, 'templates'),
+    static_folder=os.path.join(ROOT, 'static'),
+)
 app.config.from_object(Config)
 
 # ── Initialize Database & OAuth ───────────────────────────────────────────────
@@ -40,8 +51,3 @@ register_recruiter(app, users_col, results_col, db)
 register_admin(app, users_col, results_col, questions_col, db)
 register_diagnostic(app, users_col, results_col, questions_col, db)
 register_resume(app, users_col, results_col, fs)
-
-
-# ── Run ───────────────────────────────────────────────────────────────────────
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
