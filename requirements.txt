@@ -10,3 +10,4 @@ google-generativeai
 pdfkit
 gunicorn
 dnspython
+certifi

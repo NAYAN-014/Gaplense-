@@ -7,6 +7,7 @@ Circular imports se bachne ke liye sab kuch ek jagah rakha gaya hai.
 
 from pymongo import MongoClient
 import gridfs
+import certifi
 from authlib.integrations.flask_client import OAuth
 
 
@@ -16,14 +17,14 @@ def init_db(mongo_uri: str):
     Returns: (db, users_col, results_col, questions_col, fs)
     """
     try:
-        client        = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000)
+        client        = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000, tls=True, tlsCAFile=certifi.where())
         # Test connection
         client.server_info()
         print("[DB] MongoDB connected successfully!")
     except Exception as e:
         print(f"[DB WARNING] MongoDB connection failed: {e}")
         print("[DB WARNING] App will start but database features won't work.")
-        client = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000)
+        client = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000, tls=True, tlsCAFile=certifi.where())
     db            = client['gaplens']
     users_col     = db['users']
     results_col   = db['test_results']
