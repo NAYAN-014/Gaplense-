@@ -2,25 +2,49 @@
 {% block title %}Sign In{% endblock %}
 {% block extra_styles %}
 /* Login light mode overrides */
-html:not(.dark) .login-bg{background:#e8f4fd!important}
-html:not(.dark) .login-left{background:linear-gradient(135deg,#dbeafe,#ede9fe)!important}
-html:not(.dark) .login-panel{background:rgba(255,255,255,0.95)!important;border-color:rgba(0,150,200,0.15)!important}
-html:not(.dark) .input-wrap{background:rgba(0,0,0,0.04)!important;border-color:rgba(0,150,200,0.2)!important}
-html:not(.dark) .input-wrap:focus-within{background:rgba(0,180,220,0.05)!important;border-color:rgba(0,180,220,0.5)!important;box-shadow:0 0 0 3px rgba(0,180,220,0.08)!important}
+html:not(.dark) .login-bg{background:linear-gradient(135deg,#e8f4fd,#f0e8ff)!important}
+html:not(.dark) .login-left{background:linear-gradient(135deg,#dbeafe 0%,#ede9fe 100%)!important}
+html:not(.dark) .login-panel{background:rgba(255,255,255,0.95)!important;border-color:rgba(0,150,200,0.15)!important;box-shadow:0 8px 40px rgba(0,100,160,0.1)!important}
+html:not(.dark) .input-wrap{background:rgba(240,248,255,0.9)!important;border-color:rgba(0,150,200,0.25)!important}
+html:not(.dark) .input-wrap:focus-within{background:rgba(224,242,255,0.95)!important;border-color:rgba(0,150,200,0.55)!important;box-shadow:0 0 0 3px rgba(0,150,200,0.12)!important}
 html:not(.dark) .input-field{color:#0a2530!important}
-html:not(.dark) .input-field::placeholder{color:#94a3b8!important}
-html:not(.dark) .inp-icon{color:#64748b!important}
-html:not(.dark) .eye-btn{color:#64748b!important}
+html:not(.dark) .input-field::placeholder{color:#64909e!important}
+html:not(.dark) .inp-icon{color:#2d6a80!important}
+html:not(.dark) .eye-btn{color:#2d6a80!important}
+html:not(.dark) .eye-btn:hover{color:#0a2530!important}
 html:not(.dark) .login-text-main{color:#0a2530!important}
-html:not(.dark) .login-text-muted{color:#475569!important}
-html:not(.dark) .login-stat-card{background:rgba(255,255,255,0.7)!important;border-color:rgba(0,150,200,0.2)!important}
-html:not(.dark) .login-divider{background:rgba(0,0,0,0.1)!important}
-html:not(.dark) .login-google-btn{background:rgba(255,255,255,0.9)!important;border-color:rgba(0,0,0,0.1)!important;color:#0a2530!important}
-html:not(.dark) .login-google-btn:hover{background:rgba(255,255,255,1)!important}
-html:not(.dark) .login-testimonial{background:rgba(255,255,255,0.6)!important;border-color:rgba(0,150,200,0.15)!important}
-html:not(.dark) .login-tag{background:rgba(139,92,246,0.1)!important;color:#7c3aed!important;border-color:rgba(139,92,246,0.2)!important}
-html:not(.dark) .login-progress-bg{background:rgba(0,0,0,0.06)!important}
-html:not(.dark) .login-toggle-btn{background:rgba(255,255,255,0.8)!important;border-color:rgba(0,150,200,0.2)!important;color:#0a2530!important}
+html:not(.dark) .login-text-muted{color:#334e5f!important}
+html:not(.dark) .login-stat-card{background:rgba(255,255,255,0.8)!important;border-color:rgba(0,150,200,0.2)!important;box-shadow:0 4px 16px rgba(0,80,120,0.08)!important}
+html:not(.dark) .login-divider{background:rgba(0,100,150,0.12)!important}
+html:not(.dark) .login-google-btn{background:rgba(255,255,255,0.95)!important;border-color:rgba(0,0,0,0.12)!important;color:#0a2530!important;box-shadow:0 2px 8px rgba(0,0,0,0.08)!important}
+html:not(.dark) .login-google-btn:hover{background:rgba(255,255,255,1)!important;border-color:rgba(0,0,0,0.2)!important}
+html:not(.dark) .login-testimonial{background:rgba(255,255,255,0.7)!important;border-color:rgba(0,150,200,0.18)!important}
+html:not(.dark) .login-tag{background:rgba(139,92,246,0.1)!important;color:#6d28d9!important;border-color:rgba(139,92,246,0.25)!important}
+html:not(.dark) .login-progress-bg{background:rgba(0,100,150,0.08)!important}
+/* Toggle button in login page */
+html:not(.dark) .login-toggle-btn{background:rgba(255,255,255,0.9)!important;border-color:rgba(0,150,200,0.25)!important;color:#0a2530!important;box-shadow:0 2px 12px rgba(0,80,120,0.1)!important}
+html:not(.dark) .login-toggle-btn .material-symbols-outlined{color:#0077a8!important}
+/* Labels & text in login form (light) */
+html:not(.dark) label.block.text-xs,
+html:not(.dark) .flex.items-center.justify-between label{color:#1e3a4a!important}
+html:not(.dark) .text-slate-400.text-sm{color:#334e5f!important}
+html:not(.dark) .text-slate-600.text-\[10px\]{color:#4a6677!important}
+html:not(.dark) .text-slate-500.text-sm,
+html:not(.dark) .login-text-muted.text-center{color:#334e5f!important}
+/* "or" divider text */
+html:not(.dark) .text-slate-600.text-xs{color:#4a6677!important}
+/* Status text */
+html:not(.dark) .text-slate-600.text-\[10px\]{color:#4a6677!important}
+/* Stat card text inside left panel */
+html:not(.dark) .login-stat-card .text-white{color:#0a2530!important}
+html:not(.dark) .login-stat-card .text-slate-500{color:#4a6677!important}
+html:not(.dark) .login-stat-card .text-slate-300{color:#1e3a4a!important}
+/* Testimonial text */
+html:not(.dark) .login-testimonial .text-slate-300{color:#1e3a4a!important}
+html:not(.dark) .login-testimonial .text-white{color:#0a2530!important}
+html:not(.dark) .login-testimonial .text-slate-500{color:#4a6677!important}
+/* "Keep me signed in" toggle text */
+html:not(.dark) .text-sm.text-slate-400{color:#334e5f!important}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 @keyframes pulse-glow{0%,100%{opacity:0.4}50%{opacity:0.8}}
 @keyframes slide-in{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}

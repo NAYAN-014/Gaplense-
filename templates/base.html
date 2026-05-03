@@ -27,23 +27,237 @@ fontSize:{"body-md":["16px",{lineHeight:"1.6",fontWeight:"400"}],"body-lg":["18p
 .nav-link.active{color:#22d3ee;background:rgba(34,211,238,0.1);border-right:2px solid #22d3ee}
 .nav-link .material-symbols-outlined{font-size:1.1rem}
 .nav-section{font-size:0.58rem;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#475569;padding:0.8rem 0.75rem 0.3rem;display:block}
-/* Light mode */
-html:not(.dark) body{background:#f0f9ff!important;color:#0a2530!important}
-html:not(.dark) #gl-sidebar{background:rgba(240,249,255,0.92)!important;border-color:rgba(0,219,233,0.15)!important}
-html:not(.dark) #gl-topbar{background:rgba(240,249,255,0.75)!important;border-color:rgba(0,219,233,0.12)!important}
-html:not(.dark) .glass-card{background:rgba(255,255,255,0.75)!important;border-color:rgba(0,200,220,0.15)!important}
-html:not(.dark) .nav-link{color:#334155!important}
-html:not(.dark) .nav-link:hover{color:#0a2530!important;background:rgba(0,150,180,0.08)!important}
-html:not(.dark) .nav-link.active{color:#0077a8!important;background:rgba(0,150,180,0.1)!important;border-color:#0077a8!important}
-html:not(.dark) .text-white{color:#0a2530!important}
-html:not(.dark) .text-slate-400{color:#334155!important}
-html:not(.dark) .text-slate-500{color:#475569!important}
-html:not(.dark) .bg-surface{background:#f0f9ff!important}
-html:not(.dark) .bg-slate-950\/40{background:rgba(220,240,255,0.7)!important}
-html:not(.dark) .bg-slate-950\/80{background:rgba(220,240,255,0.88)!important}
-html:not(.dark) .border-white\/10{border-color:rgba(0,150,180,0.12)!important}
-html:not(.dark) .bg-white\/5{background:rgba(0,150,180,0.06)!important}
-html:not(.dark) .nav-section{color:#94a3b8!important}
+/* =====================================================================
+   LIGHT MODE — Full Override
+   Har element clearly visible hona chahiye light mode mein
+   ===================================================================== */
+
+/* Base */
+html:not(.dark) body {
+  background: #f0f8ff !important;
+  color: #0c1e26 !important;
+}
+
+/* Sidebar */
+html:not(.dark) #gl-sidebar {
+  background: rgba(255,255,255,0.95) !important;
+  border-color: rgba(0,180,210,0.2) !important;
+  box-shadow: 2px 0 20px rgba(0,100,130,0.08) !important;
+}
+html:not(.dark) .nav-section {
+  color: #64748b !important;
+  font-weight: 700 !important;
+}
+html:not(.dark) .nav-link {
+  color: #1e3a4a !important;
+}
+html:not(.dark) .nav-link .material-symbols-outlined {
+  color: #1e3a4a !important;
+}
+html:not(.dark) .nav-link:hover {
+  color: #006b8a !important;
+  background: rgba(0,150,180,0.1) !important;
+}
+html:not(.dark) .nav-link:hover .material-symbols-outlined {
+  color: #006b8a !important;
+}
+html:not(.dark) .nav-link.active {
+  color: #0077a8 !important;
+  background: rgba(0,150,180,0.12) !important;
+  border-color: #0077a8 !important;
+}
+html:not(.dark) .nav-link.active .material-symbols-outlined {
+  color: #0077a8 !important;
+}
+/* Sidebar bottom border + icons */
+html:not(.dark) #gl-sidebar .border-white\/10 {
+  border-color: rgba(0,150,180,0.15) !important;
+}
+html:not(.dark) #gl-sidebar a[style*="color:#f87171"] {
+  color: #dc2626 !important;
+}
+
+/* Topbar */
+html:not(.dark) #gl-topbar {
+  background: rgba(255,255,255,0.9) !important;
+  border-color: rgba(0,180,210,0.15) !important;
+  box-shadow: 0 2px 16px rgba(0,100,130,0.07) !important;
+}
+html:not(.dark) #gl-topbar .text-white,
+html:not(.dark) #gl-topbar p {
+  color: #0c1e26 !important;
+}
+html:not(.dark) #gl-topbar .text-slate-500,
+html:not(.dark) #gl-topbar .text-\[10px\] {
+  color: #4a6677 !important;
+}
+html:not(.dark) #gl-topbar .material-symbols-outlined {
+  color: #2d6a80 !important;
+}
+html:not(.dark) #gl-topbar .text-slate-400 {
+  color: #2d6a80 !important;
+}
+/* Topbar search bar */
+html:not(.dark) .hidden.md\:flex.items-center.bg-white\/5 {
+  background: rgba(0,140,180,0.07) !important;
+  border-color: rgba(0,150,180,0.2) !important;
+}
+html:not(.dark) #gl-topbar input {
+  color: #0c1e26 !important;
+}
+html:not(.dark) #gl-topbar input::placeholder {
+  color: #6b8fa0 !important;
+}
+/* Mobile GapLens logo in topbar */
+html:not(.dark) .text-cyan-400 {
+  color: #0077a8 !important;
+}
+/* Topbar logout button */
+html:not(.dark) #gl-topbar a[href*="logout"] {
+  color: #dc2626 !important;
+  border-color: rgba(220,38,38,0.35) !important;
+}
+html:not(.dark) #gl-topbar a[href*="logout"]:hover {
+  background: rgba(220,38,38,0.08) !important;
+}
+
+/* Main content background */
+html:not(.dark) main.md\:ml-64 {
+  background: #f0f8ff !important;
+}
+
+/* ALL dark text utilities → dark in light mode */
+html:not(.dark) .text-white        { color: #0c1e26 !important; }
+html:not(.dark) .text-slate-100    { color: #0c1e26 !important; }
+html:not(.dark) .text-slate-200    { color: #1e3a4a !important; }
+html:not(.dark) .text-slate-300    { color: #1e3a4a !important; }
+html:not(.dark) .text-slate-400    { color: #334e5f !important; }
+html:not(.dark) .text-slate-500    { color: #4a6677 !important; }
+html:not(.dark) .text-slate-600    { color: #5a7a8a !important; }
+html:not(.dark) .text-on-surface   { color: #0c1e26 !important; }
+
+/* Material Symbols icons — dark in light mode */
+html:not(.dark) .material-symbols-outlined {
+  color: inherit !important;
+}
+html:not(.dark) .text-slate-400 .material-symbols-outlined,
+html:not(.dark) .text-slate-500 .material-symbols-outlined {
+  color: #334e5f !important;
+}
+
+/* Cyan accent stays visible */
+html:not(.dark) .text-cyan-300 { color: #0077a8 !important; }
+html:not(.dark) .text-cyan-400 { color: #006b8a !important; }
+html:not(.dark) .text-cyan-500 { color: #005e7a !important; }
+html:not(.dark) .text-cyan-600 { color: #004f68 !important; }
+
+/* Glass cards */
+html:not(.dark) .glass-card {
+  background: rgba(255,255,255,0.88) !important;
+  border-color: rgba(0,180,210,0.18) !important;
+  box-shadow: 0 4px 24px rgba(0,100,130,0.08) !important;
+}
+html:not(.dark) .glass-card:hover {
+  background: rgba(255,255,255,0.97) !important;
+  border-color: rgba(0,150,180,0.35) !important;
+}
+
+/* Backgrounds */
+html:not(.dark) .bg-surface                  { background: #f0f8ff !important; }
+html:not(.dark) .bg-slate-950\/40            { background: rgba(220,240,255,0.6) !important; }
+html:not(.dark) .bg-slate-950\/50            { background: rgba(220,240,255,0.7) !important; }
+html:not(.dark) .bg-slate-950\/80            { background: rgba(220,240,255,0.85) !important; }
+html:not(.dark) .bg-slate-950\/85            { background: rgba(220,240,255,0.9) !important; }
+html:not(.dark) .bg-white\/5                 { background: rgba(0,140,180,0.06) !important; }
+html:not(.dark) .bg-white\/10               { background: rgba(0,140,180,0.1) !important; }
+html:not(.dark) [class*="bg-slate-900"]      { background: rgba(240,248,255,0.95) !important; }
+html:not(.dark) [class*="bg-slate-800"]      { background: rgba(235,245,255,0.95) !important; }
+
+/* Borders */
+html:not(.dark) .border-white\/10  { border-color: rgba(0,150,180,0.15) !important; }
+html:not(.dark) .border-white\/5   { border-color: rgba(0,150,180,0.1) !important; }
+html:not(.dark) [class*="border-slate-700"] { border-color: rgba(0,140,180,0.2) !important; }
+html:not(.dark) [class*="border-slate-800"] { border-color: rgba(0,140,180,0.15) !important; }
+
+/* Inputs & textareas */
+html:not(.dark) input:not([type="submit"]):not([type="button"]):not([type="range"]),
+html:not(.dark) textarea,
+html:not(.dark) select {
+  background: rgba(255,255,255,0.95) !important;
+  color: #0c1e26 !important;
+  border-color: rgba(0,140,180,0.3) !important;
+}
+html:not(.dark) input::placeholder,
+html:not(.dark) textarea::placeholder {
+  color: #6b8fa0 !important;
+}
+html:not(.dark) input:focus,
+html:not(.dark) textarea:focus,
+html:not(.dark) select:focus {
+  border-color: #0077a8 !important;
+  box-shadow: 0 0 0 3px rgba(0,119,168,0.15) !important;
+  outline: none !important;
+}
+html:not(.dark) label {
+  color: #1e3a4a !important;
+}
+
+/* Badges */
+html:not(.dark) .bg-cyan-500\/10  { background: rgba(0,140,180,0.12) !important; }
+html:not(.dark) .text-cyan-300    { color: #005e7a !important; }
+html:not(.dark) .border-cyan-500\/20 { border-color: rgba(0,120,160,0.3) !important; }
+html:not(.dark) .bg-red-500\/15   { background: rgba(220,38,38,0.1) !important; }
+html:not(.dark) .text-red-300     { color: #b91c1c !important; }
+html:not(.dark) .text-red-400     { color: #dc2626 !important; }
+html:not(.dark) .border-red-500\/30 { border-color: rgba(185,28,28,0.3) !important; }
+html:not(.dark) .bg-green-500\/10  { background: rgba(0,160,100,0.1) !important; }
+html:not(.dark) .text-green-400   { color: #059669 !important; }
+html:not(.dark) .text-green-300   { color: #047857 !important; }
+html:not(.dark) .bg-purple-500\/10 { background: rgba(130,0,200,0.08) !important; }
+html:not(.dark) .text-purple-400  { color: #7c3aed !important; }
+
+/* Flash messages */
+html:not(.dark) .bg-red-500\/15   { background: rgba(254,226,226,0.9) !important; }
+html:not(.dark) .bg-cyan-500\/15  { background: rgba(207,250,254,0.9) !important; }
+html:not(.dark) .text-red-300     { color: #b91c1c !important; }
+html:not(.dark) .text-cyan-300    { color: #0e7490 !important; }
+html:not(.dark) .border-red-500\/30   { border-color: #fca5a5 !important; }
+html:not(.dark) .border-cyan-500\/30  { border-color: #67e8f9 !important; }
+
+/* Progress bars */
+html:not(.dark) .bg-white\/5.rounded-full { background: rgba(0,140,180,0.1) !important; }
+
+/* Mobile bottom nav */
+html:not(.dark) .md\:hidden.fixed.bottom-0 {
+  background: rgba(255,255,255,0.97) !important;
+  border-color: rgba(0,150,180,0.2) !important;
+  box-shadow: 0 -2px 20px rgba(0,100,130,0.1) !important;
+}
+html:not(.dark) .md\:hidden.fixed.bottom-0 .text-slate-500 {
+  color: #4a6677 !important;
+}
+html:not(.dark) .md\:hidden.fixed.bottom-0 .material-symbols-outlined {
+  color: #4a6677 !important;
+}
+html:not(.dark) .md\:hidden.fixed.bottom-0 span[class*="text-[9px]"] {
+  color: #4a6677 !important;
+}
+
+/* Gradient text stays visible */
+html:not(.dark) .bg-gradient-to-r.from-cyan-400,
+html:not(.dark) [class*="from-cyan"] {
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+/* Override any remaining unreadable light text */
+html:not(.dark) [class*="text-slate-"] {
+  --tw-text-opacity: 1;
+}
+html:not(.dark) .font-bold,
+html:not(.dark) .font-semibold,
+html:not(.dark) .font-medium {
+  color: inherit;
+}
 {% block extra_styles %}{% endblock %}
 </style>
 {% block extra_head %}{% endblock %}
