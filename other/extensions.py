@@ -15,7 +15,15 @@ def init_db(mongo_uri: str):
     MongoDB client aur sabhi collections initialize karo.
     Returns: (db, users_col, results_col, questions_col, fs)
     """
-    client        = MongoClient(mongo_uri)
+    try:
+        client        = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000)
+        # Test connection
+        client.server_info()
+        print("[DB] MongoDB connected successfully!")
+    except Exception as e:
+        print(f"[DB WARNING] MongoDB connection failed: {e}")
+        print("[DB WARNING] App will start but database features won't work.")
+        client = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000)
     db            = client['gaplens']
     users_col     = db['users']
     results_col   = db['test_results']

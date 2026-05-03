@@ -1,7 +1,37 @@
 {% extends 'base.html' %}
+{% block extra_styles %}
+/* Recruiter Dashboard Light Mode */
+html:not(.dark) .text-white{color:#0c1e26!important}
+html:not(.dark) .text-slate-300{color:#1e3a4a!important}
+html:not(.dark) .text-slate-400{color:#334e5f!important}
+html:not(.dark) .text-slate-500{color:#4a6677!important}
+html:not(.dark) .text-slate-600{color:#5a7a8a!important}
+html:not(.dark) .text-zinc-500{color:#4a6677!important}
+html:not(.dark) .text-cyan-400{color:#006b8a!important}
+html:not(.dark) .text-green-400{color:#059669!important}
+html:not(.dark) .text-purple-400{color:#7c3aed!important}
+html:not(.dark) .text-yellow-400{color:#b45309!important}
+html:not(.dark) .text-orange-400{color:#c2410c!important}
+html:not(.dark) .glass-card{background:rgba(255,255,255,0.88)!important;border-color:rgba(0,180,210,0.18)!important;box-shadow:0 4px 24px rgba(0,100,130,0.08)!important}
+html:not(.dark) .border-white\/5{border-color:rgba(0,150,180,0.1)!important}
+html:not(.dark) .border-white\/10{border-color:rgba(0,150,180,0.15)!important}
+html:not(.dark) .bg-white\/5{background:rgba(0,140,180,0.06)!important}
+html:not(.dark) .bg-white\/10{background:rgba(0,140,180,0.1)!important}
+html:not(.dark) .hover\:bg-white\/5:hover{background:rgba(0,140,180,0.06)!important}
+html:not(.dark) .bg-surface-container{background:rgba(220,240,255,0.6)!important}
+html:not(.dark) .bg-surface-container-high\/50{background:rgba(210,235,255,0.7)!important}
+html:not(.dark) .divide-white\/5>*{border-color:rgba(0,150,180,0.12)!important}
+html:not(.dark) input:not([type=submit]):not([type=button]){background:rgba(255,255,255,0.95)!important;color:#0c1e26!important;border-color:rgba(0,140,180,0.3)!important}
+html:not(.dark) input::placeholder{color:#6b8fa0!important}
+html:not(.dark) .bg-green-500\/10{background:rgba(5,150,105,0.1)!important}
+html:not(.dark) .bg-yellow-500\/10{background:rgba(180,83,9,0.08)!important}
+html:not(.dark) .bg-cyan-500\/10{background:rgba(0,140,180,0.1)!important}
+html:not(.dark) .bg-red-500\/10{background:rgba(220,38,38,0.08)!important}
+html:not(.dark) .text-red-400{color:#dc2626!important}
+{% endblock %}
 {% block title %}Recruiter Dashboard{% endblock %}
 {% block content %}
-<div class="max-w-7xl mx-auto pb-20">
+
   <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
     <div>
       <h1 class="text-2xl font-bold text-white font-['Space_Grotesk']">Recruiter Dashboard</h1>

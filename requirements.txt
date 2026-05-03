@@ -9,3 +9,4 @@ google-auth-oauthlib
 google-generativeai
 pdfkit
 gunicorn
+dnspython
